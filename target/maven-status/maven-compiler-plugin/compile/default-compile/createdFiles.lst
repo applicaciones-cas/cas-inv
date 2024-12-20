@@ -1,2 +1,3 @@
+org\guanzon\cas\inv\model\Model_Inv_Master.class
 org\guanzon\cas\inv\Inventory.class
 org\guanzon\cas\inv\model\Model_Inventory.class
