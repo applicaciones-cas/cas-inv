@@ -71,222 +71,150 @@ public class Model_Inv_Master extends Model{
         return (String) getValue("sBranchCd");
     }
     
-    public JSONObject setDescription(String description){
-        return setValue("sDescript", description);
+    public JSONObject setWarehouseId(String warehouseId){
+        return setValue("sWHouseID", warehouseId);
     }
     
-    public String getDescription(){
-        return (String) getValue("sDescript");
+    public String getWarehouseId(){
+        return (String) getValue("sWHouseID");
     }
     
-    public JSONObject setBriefDescription(String briefDescription){
+    public JSONObject setLocationId(String briefDescription){
         return setValue("sBriefDsc", briefDescription);
     }
     
-    public String getBriefDescription(){
+    public String getLocationId(){
         return (String) getValue("sBriefDsc");
     }
     
-    public JSONObject setAlternateBarCode(String alternateBarCode){
-        return setValue("sAltBarCd", alternateBarCode);
+    public JSONObject setBinId(String binId){
+        return setValue("sBinNumbr", binId);
     }
     
-    public String getAlternateBarCode(){
-        return (String) getValue("sAltBarCd");
+    public String getBinId(){
+        return (String) getValue("sBinNumbr");
     }
     
-    public JSONObject setCategoryFirstLevelId(String cagetoryId){
-        return setValue("sCategCd1", cagetoryId);
+    public JSONObject setDateAcquired(Date dateAcquired){
+        return setValue("dAcquired", dateAcquired);
     }
     
-    public String getCategoryFirstLevelId(){
-        return (String) getValue("sCategCd1");
+    public Date getDateAcquired(){
+        return (Date) getValue("dAcquired");
     }
     
-    public JSONObject setCategoryIdSecondLevel(String cagetoryId){
-        return setValue("sCategCd2", cagetoryId);
+    public JSONObject setBeginningInventoryDate(Date beginningInventoryDate){
+        return setValue("dBegInvxx", beginningInventoryDate);
     }
     
-    public String getCategoryIdSecondLevel(){
-        return (String) getValue("sCategCd2");
+    public Date getBeginningInventoryDate(){
+        return (Date) getValue("dBegInvxx");
     }
     
-    public JSONObject setCategoryIdThirdLevel(String cagetoryId){
-        return setValue("sCategCd3", cagetoryId);
+    public JSONObject setBeginningInventoryQuantity(int beginningInventoryQuantity){
+        return setValue("nBegQtyxx", beginningInventoryQuantity);
     }
     
-    public String getCategoryIdThirdLevel(){
-        return (String) getValue("sCategCd3");
+    public int getBeginningInventoryQuantity(){
+        return (int) getValue("nBegQtyxx");
+    }   
+    
+    public JSONObject setQuantityOnHand(int quantityOnHand){
+        return setValue("nBegQtyxx", quantityOnHand);
     }
     
-    public JSONObject setCategoryIdFourthLevel(String cagetoryId){
-        return setValue("sCategCd4", cagetoryId);
+    public int getQuantityOnHand(){
+        return (int) getValue("nBegQtyxx");
+    }  
+    
+    public JSONObject setLedgerCount(int ledgerCount){
+        return setValue("nLedgerNo", ledgerCount);
     }
     
-    public String getCategoryIdFourthLevel(){
-        return (String) getValue("sCategCd4");
+    public int getLedgerCount(){
+        return (int) getValue("nLedgerNo");
+    }   
+    
+    public JSONObject setMinimumLevel(int minimumInventoryLevel){
+        return setValue("nMinLevel", minimumInventoryLevel);
     }
     
-    public JSONObject setBrandId(String brandId){
-        return setValue("sBrandIDx", brandId);
-    }
-    
-    public String getBrandId(){
-        return (String) getValue("sBrandIDx");
-    }
-    
-    public JSONObject setModelId(String brandId){
-        return setValue("sModelIDx", brandId);
-    }
-    
-    public String getModelId(){
-        return (String) getValue("sModelIDx");
-    }
-    
-    public JSONObject setColorId(String brandId){
-        return setValue("sColorIDx", brandId);
-    }
-    
-    public String getColorId(){
-        return (String) getValue("sColorIDx");
-    }
-    
-    public JSONObject setMeasurementId(String measurementId){
-        return setValue("sMeasurID", measurementId);
-    }
-    
-    public String getMeasurementId(){
-        return (String) getValue("sMeasurID");
-    }
-    
-    public JSONObject setInventoryTypeId(String inventoryTypeId){
-        return setValue("sInvTypCd", inventoryTypeId);
-    }
-    
-    public String getInventoryTypeId(){
-        return (String) getValue("sInvTypCd");
-    }
-    
-    public JSONObject setCost(double cost){
-        return setValue("nUnitPrce", cost);
-    }
-    
-    public double getCost(){
-        return (double) getValue("nUnitPrce");
-    }
-    
-    public JSONObject setSellingPrice(double sellingPrice){
-        return setValue("nSelPrice", sellingPrice);
-    }
-    
-    public double getSellingPrice(){
-        return (double) getValue("nSelPrice");
-    }
-    
-    public JSONObject setDiscountRateLevel1(double discountRate){
-        return setValue("nDiscLev1", discountRate);
-    }
-    
-    public double getDiscountRateLevel1(){
-        return (double) getValue("nDiscLev1");
-    }
-    
-    public JSONObject setDiscountRateLevel2(double discountRate){
-        return setValue("nDiscLev2", discountRate);
-    }
-    
-    public double getDiscountRateLevel2(){
-        return (double) getValue("nDiscLev2");
-    }
-    
-    public JSONObject setDiscountRateLevel3(double discountRate){
-        return setValue("nDiscLev3", discountRate);
-    }
-    
-    public double getDiscountRateLevel3(){
-        return (double) getValue("nDiscLev3");
-    }
-    
-    public JSONObject setDealerDiscountRate(double discountRate){
-        return setValue("nDealrDsc", discountRate);
-    }
-    
-    public double getDealerDiscountRate(){
-        return (double) getValue("nDealrDsc");
-    }
-    
-    public JSONObject setMinimumInventoryLevel(int quantity){
-        return setValue("nMinLevel", quantity);
-    }
-    
-    public int getMinimumInventoryLevel(){
+    public int getMinimumLevel(){
         return (int) getValue("nMinLevel");
+    }   
+    
+    public JSONObject setMaximumLevel(int maximumInventoryLevel){
+        return setValue("nMaxLevel", maximumInventoryLevel);
     }
     
-    public JSONObject setMaximumInventoryLevel(int quantity){
-        return setValue("nMaxLevel", quantity);
-    }
-    
-    public int getMaximumInventoryLevel(){
+    public int getMaximumLevel(){
         return (int) getValue("nMaxLevel");
+    }   
+    
+    public JSONObject setAverageMonthlySale(int averageMonthlySale){
+        return setValue("nMaxLevel", averageMonthlySale);
     }
     
-    public JSONObject isComboInventory(boolean isComboInventory){
-        return setValue("cComboInv", isComboInventory ? "1" : "0");
+    public int getAverageMonthlySales(){
+        return (int) getValue("nMaxLevel");
+    }   
+    
+    public JSONObject setAverageCost(double averageCost){
+        return setValue("nAvgCostx", averageCost);
+    }
+    
+    public double getAverageCost(){
+        return (double) getValue("nAvgCostx");
+    }   
+    
+    public JSONObject setInventoryClassification(String inventoryClassification){
+        return setValue("cClassify", inventoryClassification);
+    }
+    
+    public String getInventoryClassification(){
+        return (String) getValue("cClassify");
+    }
+    
+    public JSONObject setBackOrderQuantity(int backOrderQuantity){
+        return setValue("nBackOrdr", backOrderQuantity);
+    }
+    
+    public int getBackOrderQuantity(){
+        return (int) getValue("nBackOrdr");
+    }   
+    
+    public JSONObject setReserveOrderQuantity(int reserveOrderQuantity){
+        return setValue("nResvOrdr", reserveOrderQuantity);
+    }
+    
+    public int getReserveOrderQuantity(){
+        return (int) getValue("nResvOrdr");
+    }   
+    
+    public JSONObject setFloatQuantity(int reserveQuantity){
+        return setValue("nFloatQty", reserveQuantity);
+    }
+    
+    public int getFloatQuantity(){
+        return (int) getValue("nFloatQty");
+    }   
+    
+    public JSONObject setLastTransactionDate(Date lastTransactionDate){
+        return setValue("dLastTran", lastTransactionDate);
+    }
+    
+    public Date getLastTransactionDate(){
+        return (Date) getValue("dLastTran");
+    }
+    
+    public JSONObject isPrimary(boolean isPrimary){
+        return setValue("cPrimaryx", isPrimary ? "1" : "0");
     }
 
-    public boolean isComboInventory(){
-        return ((String) getValue("cComboInv")).equals("1");
+    public boolean isPrimary(){
+        return ((String) getValue("cPrimaryx")).equals("1");
     }
-    
-    public JSONObject isWithPromo(boolean isWithPromo){
-        return setValue("cWthPromo", isWithPromo ? "1" : "0");
-    }
-
-    public boolean isWithPromo(){
-        return ((String) getValue("cWthPromo")).equals("1");
-    }
-    
-    public JSONObject isSerialized(boolean isSerialized){
-        return setValue("cSerialze", isSerialized ? "1" : "0");
-    }
-
-    public boolean isSerialized(){
-        return ((String) getValue("cSerialze")).equals("1");
-    }
-    
-    public JSONObject setUnitType(String unitType){
-        return setValue("cUnitType", unitType);
-    }
-    
-    public String getUnitType(){
-        return (String) getValue("cUnitType");
-    }
-    
-    public JSONObject setInventoryStatus(String inventoryStatus){
-        return setValue("cInvStatx", inventoryStatus);
-    }
-    
-    public String getInventoryStatus(){
-        return (String) getValue("cInvStatx");
-    }
-    
-    public JSONObject setShelfLife(int days){
-        return setValue("nShlfLife", days);
-    }
-    
-    public int getShelfLife(){
-        return (int) getValue("nShlfLife");
-    }
-    
-    public JSONObject setSupersededId(String supersededId){
-        return setValue("sSupersed", supersededId);
-    }
-    
-    public String getSupersededId(){
-        return (String) getValue("sSupersed");
-    }
-    
+        
     public JSONObject setRecordStatus(String recordStatus){
         return setValue("cRecdStat", recordStatus);
     }
