@@ -21,14 +21,117 @@ import org.guanzon.cas.parameter.model.Model_Model;
 import org.json.simple.JSONObject;
 
 public class Model_Inventory extends Model {
-    
-    private final Map<String, Model> relatedModels = new HashMap<>();
+
+    private Model_Category poCategory;
+    private Model_Category_Level2 poCategoryLevel2;
+    private Model_Category_Level3 poCategoryLevel3;
+    private Model_Category_Level4 poCategoryLevel4;
+    private Model_Brand poBrand;
+    private Model_Model poModel;
+    private Model_Color poColor;
+    private Model_Measure poMeasure;
+    private Model_Inv_Type poInventoryType;
 
     @Override
     public void initialize() {
         try {
-            initializeEntity();
-            initializeRelatedModels();
+            poEntity = MiscUtil.xml2ResultSet(System.getProperty("sys.default.path.metadata") + XML, getTable());
+
+            poEntity.last();
+            poEntity.moveToInsertRow();
+
+            MiscUtil.initRowSet(poEntity);
+
+            //assign default values
+            poEntity.updateObject("nUnitPrce", 0.00);
+            poEntity.updateObject("nSelPrice", 0.00);
+            poEntity.updateObject("nDiscLev1", 0.00);
+            poEntity.updateObject("nDiscLev2", 0.00);
+            poEntity.updateObject("nDiscLev3", 0.00);
+            poEntity.updateObject("nDealrDsc", 0.00);
+            poEntity.updateObject("nMinLevel", 0);
+            poEntity.updateObject("nMaxLevel", 0);
+            poEntity.updateObject("nShlfLife", 0);
+            poEntity.updateString("cComboInv", Logical.NO);
+            poEntity.updateString("cWthPromo", Logical.NO);
+            poEntity.updateString("cSerialze", Logical.NO);
+            poEntity.updateString("cUnitType", Logical.NO);
+            poEntity.updateString("cInvStatx", RecordStatus.ACTIVE);
+            poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
+            //end - assign default values
+
+            poEntity.insertRow();
+            poEntity.moveToCurrentRow();
+
+            poEntity.absolute(1);
+
+            ID = poEntity.getMetaData().getColumnLabel(1);
+
+            //initialize other connections
+            //Category 
+            poCategory = new Model_Category();
+            poCategory.setApplicationDriver(poGRider);
+            poCategory.setXML("Model_Category");
+            poCategory.setTableName("Category");
+            poCategory.initialize();
+
+            //Category Level 2
+            poCategoryLevel2 = new Model_Category_Level2();
+            poCategoryLevel2.setApplicationDriver(poGRider);
+            poCategoryLevel2.setXML("Model_Category_Level2");
+            poCategoryLevel2.setTableName("Category_Level3");
+            poCategoryLevel2.initialize();
+
+            //Category Level 3
+            poCategoryLevel3 = new Model_Category_Level3();
+            poCategoryLevel3.setApplicationDriver(poGRider);
+            poCategoryLevel3.setXML("Model_Category_Level3");
+            poCategoryLevel3.setTableName("Category_Level3");
+            poCategoryLevel3.initialize();
+
+            //Category Level 4
+            poCategoryLevel4 = new Model_Category_Level4();
+            poCategoryLevel4.setApplicationDriver(poGRider);
+            poCategoryLevel4.setXML("Model_Category_Level4");
+            poCategoryLevel4.setTableName("Category_Level4");
+            poCategoryLevel4.initialize();
+
+            //Brand
+            poBrand = new Model_Brand();
+            poBrand.setApplicationDriver(poGRider);
+            poBrand.setXML("Model_Brand");
+            poBrand.setTableName("Brand");
+            poBrand.initialize();
+
+            //Model
+            poModel = new Model_Model();
+            poModel.setApplicationDriver(poGRider);
+            poModel.setXML("Model_Model");
+            poModel.setTableName("Model");
+            poModel.initialize();
+
+            //Color
+            poColor = new Model_Color();
+            poColor.setApplicationDriver(poGRider);
+            poColor.setXML("Model_Color");
+            poColor.setTableName("Color");
+            poColor.initialize();
+
+            //Measure
+            poMeasure = new Model_Measure();
+            poMeasure.setApplicationDriver(poGRider);
+            poMeasure.setXML("Model_Measure");
+            poMeasure.setTableName("Measure");
+            poMeasure.initialize();
+
+            //Inventory Type
+            poInventoryType = new Model_Inv_Type();
+            poInventoryType.setApplicationDriver(poGRider);
+            poInventoryType.setXML("Model_Inv_Type");
+            poInventoryType.setTableName("Inv_Type");
+            poInventoryType.initialize();
+            //end - initialize other connections
+
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -36,109 +139,195 @@ public class Model_Inventory extends Model {
         }
     }
 
-    private void initializeEntity() throws SQLException {
-        poEntity = MiscUtil.xml2ResultSet(System.getProperty("sys.default.path.metadata") + XML, getTable());
-        poEntity.last();
-        poEntity.moveToInsertRow();
-        MiscUtil.initRowSet(poEntity);
-
-        // Assign default values
-        poEntity.updateObject("nUnitPrce", 0.00);
-        poEntity.updateObject("nSelPrice", 0.00);
-        poEntity.updateObject("nDiscLev1", 0.00);
-        poEntity.updateObject("nDiscLev2", 0.00);
-        poEntity.updateObject("nDiscLev3", 0.00);
-        poEntity.updateObject("nDealrDsc", 0.00);
-        poEntity.updateObject("nMinLevel", 0);
-        poEntity.updateObject("nMaxLevel", 0);
-        poEntity.updateObject("nShlfLife", 0);
-        poEntity.updateString("cComboInv", Logical.NO);
-        poEntity.updateString("cWthPromo", Logical.NO);
-        poEntity.updateString("cSerialze", Logical.NO);
-        poEntity.updateString("cUnitType", Logical.NO);
-        poEntity.updateString("cInvStatx", RecordStatus.ACTIVE);
-        poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
-
-        poEntity.insertRow();
-        poEntity.moveToCurrentRow();
-        poEntity.absolute(1);
-
-        ID = poEntity.getMetaData().getColumnLabel(1);
-    }
-
-    private void initializeRelatedModels() {
-        registerModel("Category", new Model_Category(), "Model_Category", "Category");
-        registerModel("Category_Level2", new Model_Category_Level2(), "Model_Category_Level2", "Category_Level2");
-        registerModel("Category_Level3", new Model_Category_Level3(), "Model_Category_Level3", "Category_Level3");
-        registerModel("Category_Level4", new Model_Category_Level4(), "Model_Category_Level4", "Category_Level4");
-        registerModel("Brand", new Model_Brand(), "Model_Brand", "Brand");
-        registerModel("Model", new Model_Model(), "Model_Model", "Model");
-        registerModel("Color", new Model_Color(), "Model_Color", "Color");
-        registerModel("Measure", new Model_Measure(), "Model_Measure", "Measure");
-        registerModel("InventoryType", new Model_Inv_Type(), "Model_Inv_Type", "Inv_Type");
-    }
-
-    private void registerModel(String key, Model model, String xml, String tableName) {
-        model.setApplicationDriver(poGRider);
-        model.setXML(xml);
-        model.setTableName(tableName);
-        model.initialize();
-        relatedModels.put(key, model);
-    }
-
-    public Model getModel(String key, String idKey, String idValue) {
-        Model model = relatedModels.get(key);
-        if (model == null) return null;
-
-        if (!idValue.isEmpty() && model.getEditMode() == EditMode.READY && idValue.equals(getValue(idKey))) {
-            return model;
-        }
-
-        poJSON = model.openRecord(idValue);
-        if ("success".equals(poJSON.get("result"))) {
-            return model;
-        } else {
-            model.initialize();
-            return model;
-        }
-    }
-
     public Model_Category Category() {
-        return (Model_Category) getModel("Category", "sCategrCd", (String) getValue("sCategrCd"));
+        if (!"".equals((String) getValue("sCategrCd"))) {
+            if (poCategory.getEditMode() == EditMode.READY
+                    && poCategory.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                return poCategory;
+            } else {
+                poJSON = poCategory.openRecord((String) getValue("sCategrCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategory;
+                } else {
+                    poCategory.initialize();
+                    return poCategory;
+                }
+            }
+        } else {
+            poCategory.initialize();
+            return poCategory;
+        }
     }
 
     public Model_Category_Level2 CategoryLevel2() {
-        return (Model_Category_Level2) getModel("Category_Level2", "sCategrCd", (String) getValue("sCategrCd"));
+        System.out.println("xxxx = " + (String) getValue("sCategrCd") ); 
+        if (!"".equals((String) getValue("sCategrCd"))) {
+            if (poCategoryLevel2.getEditMode() == EditMode.READY
+                    && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                return poCategoryLevel2;
+            } else {
+                poJSON = poCategoryLevel2.openRecord((String) getValue("sCategrCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel2;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel2;
+                }
+            }
+        } else {
+            poCategoryLevel2.initialize();
+            return poCategoryLevel2;
+        }
     }
 
     public Model_Category_Level3 CategoryLevel3() {
-        return (Model_Category_Level3) getModel("Category_Level3", "sCategrCd", (String) getValue("sCategrCd"));
+        if (!"".equals((String) getValue("sCategrCd"))) {
+            if (poCategoryLevel3.getEditMode() == EditMode.READY
+                    && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                return poCategoryLevel3;
+            } else {
+                poJSON = poCategoryLevel3.openRecord((String) getValue("sCategrCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel3;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel3;
+                }
+            }
+        } else {
+            poCategoryLevel3.initialize();
+            return poCategoryLevel3;
+        }
     }
 
     public Model_Category_Level4 CategoryLevel4() {
-        return (Model_Category_Level4) getModel("Category_Level4", "sCategrCd", (String) getValue("sCategrCd"));
+        if (!"".equals((String) getValue("sCategrCd"))) {
+            if (poCategoryLevel4.getEditMode() == EditMode.READY
+                    && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                return poCategoryLevel4;
+            } else {
+                poJSON = poCategoryLevel4.openRecord((String) getValue("sCategrCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel4;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel4;
+                }
+            }
+        } else {
+            poCategoryLevel4.initialize();
+            return poCategoryLevel4;
+        }
     }
 
     public Model_Brand Brand() {
-        return (Model_Brand) getModel("Brand", "sBrandIdx", (String) getValue("sBrandIdx"));
+        if (!"".equals((String) getValue("sBrandIdx"))) {
+            if (poBrand.getEditMode() == EditMode.READY
+                    && poBrand.getBrandId().equals((String) getValue("sBrandIdx"))) {
+                return poBrand;
+            } else {
+                poJSON = poBrand.openRecord((String) getValue("sBrandIdx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poBrand;
+                } else {
+                    poCategory.initialize();
+                    return poBrand;
+                }
+            }
+        } else {
+            poBrand.initialize();
+            return poBrand;
+        }
     }
 
-    public Model_Model ModelDetails() {
-        return (Model_Model) getModel("Model", "sModelIDx", (String) getValue("sModelIDx"));
+    public Model_Model Model() {
+        if (!"".equals((String) getValue("sModelIDx"))) {
+            if (poModel.getEditMode() == EditMode.READY
+                    && poModel.getBrandId().equals((String) getValue("sModelIDx"))) {
+                return poModel;
+            } else {
+                poJSON = poModel.openRecord((String) getValue("sModelIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poModel;
+                } else {
+                    poCategory.initialize();
+                    return poModel;
+                }
+            }
+        } else {
+            poModel.initialize();
+            return poModel;
+        }
     }
 
     public Model_Color Color() {
-        return (Model_Color) getModel("Color", "sColorIDx", (String) getValue("sColorIDx"));
+        if (!"".equals((String) getValue("sColorIDx"))) {
+            if (poColor.getEditMode() == EditMode.READY
+                    && poColor.getColorId().equals((String) getValue("sColorIDx"))) {
+                return poColor;
+            } else {
+                poJSON = poColor.openRecord((String) getValue("sColorIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poColor;
+                } else {
+                    poCategory.initialize();
+                    return poColor;
+                }
+            }
+        } else {
+            poColor.initialize();
+            return poColor;
+        }
     }
 
     public Model_Measure Measure() {
-        return (Model_Measure) getModel("Measure", "sMeasurID", (String) getValue("sMeasurID"));
+        if (!"".equals((String) getValue("sMeasurID"))) {
+            if (poMeasure.getEditMode() == EditMode.READY
+                    && poMeasure.getMeasureId().equals((String) getValue("sMeasurID"))) {
+                return poMeasure;
+            } else {
+                poJSON = poMeasure.openRecord((String) getValue("sMeasurID"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poMeasure;
+                } else {
+                    poCategory.initialize();
+                    return poMeasure;
+                }
+            }
+        } else {
+            poMeasure.initialize();
+            return poMeasure;
+        }
     }
 
     public Model_Inv_Type InventoryType() {
-        return (Model_Inv_Type) getModel("InventoryType", "sInvTypCd", (String) getValue("sInvTypCd"));
+        if (!"".equals((String) getValue("sInvTypCd"))) {
+            if (poInventoryType.getEditMode() == EditMode.READY
+                    && poInventoryType.getInventoryTypeId().equals((String) getValue("sInvTypCd"))) {
+                return poInventoryType;
+            } else {
+                poJSON = poInventoryType.openRecord((String) getValue("sInvTypCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poInventoryType;
+                } else {
+                    poCategory.initialize();
+                    return poInventoryType;
+                }
+            }
+        } else {
+            poInventoryType.initialize();
+            return poInventoryType;
+        }
     }
-    
     
     public JSONObject setStockId(String stockId) {
         return setValue("sStockIDx", stockId);
