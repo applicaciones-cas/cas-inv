@@ -8,9 +8,17 @@ import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.InventoryClassification;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
+import org.guanzon.cas.parameter.Parameters;
+import org.guanzon.cas.parameter.model.Model_Inv_Location;
+import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.json.simple.JSONObject;
 
 public class Model_Inv_Master extends Model{
+    Parameters poParams;
+    Model_Inventory poInventory;
+    Model_Warehouse poWarehouse;
+    Model_Inv_Location poInvLocation;
+    
     @Override
     public void initialize() {
         try {
@@ -47,6 +55,10 @@ public class Model_Inv_Master extends Model{
 
             ID = "sStockIDx";
             ID2 = "sBranchCd";
+            
+            poParams = new Parameters(poGRider, logwrapr);
+            poWarehouse = poParams.Warehouse().getModel();
+            poInvLocation = poParams.InventoryLocation().getModel();
             
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {

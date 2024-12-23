@@ -84,9 +84,9 @@ public class Inv_Master extends Parameter{
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
-                "Bar Code»Description»Brand»Model»Color»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
+                "Bar Code»Description»Brand»Color»On Hand»Selling Price»ID",
+                "sBarCodex»sDescript»xModelNme»xColorNme»nSelPrice»sStockIDx",
+                "a.sBarCodex»a.sDescript»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»b.nQtyOnHnd»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
         if (poJSON != null) {

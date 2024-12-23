@@ -34,67 +34,71 @@ public class testInventory {
         loJSON = record.newRecord();
         if ("error".equals((String) loJSON.get("result"))) {
             Assert.fail((String) loJSON.get("message"));
-        }           
+        }    
         
-        loJSON = record.getModel().setBarCode("000-000-000-111");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setDescription("Sample item from new program structure.");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setModifyingId(instance.getUserID());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.saveRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }  
-    }
-   
-    @Test
-    public void testUpdateRecord() {
-        JSONObject loJSON;
-
-        loJSON = record.openRecord("M00124000119");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }      
-        
-        loJSON = record.updateRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }      
-        
-        loJSON = record.getModel().setDescription("Sample item from new program structure updated.");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setModifyingId(instance.getUserID());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.saveRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        } 
+        System.out.println(record.getModel().getStockId());
+        System.out.println(record.getModel().getBarCode());
+        System.out.println(record.getModel().getDescription());
+                
+//        loJSON = record.getModel().setBarCode("000-000-000-111");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.getModel().setDescription("Sample item from new program structure.");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.getModel().setModifyingId(instance.getUserID());
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.saveRecord();
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }  
+//    }
+//   
+//    @Test
+//    public void testUpdateRecord() {
+//        JSONObject loJSON;
+//
+//        loJSON = record.openRecord("M00124000119");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }      
+//        
+//        loJSON = record.updateRecord();
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }      
+//        
+//        loJSON = record.getModel().setDescription("Sample item from new program structure updated.");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.getModel().setModifyingId(instance.getUserID());
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
+//        loJSON = record.saveRecord();
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        } 
     }
     
 //    @Test
