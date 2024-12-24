@@ -79,7 +79,7 @@ public class Model_Inventory extends Model {
             poCategoryLevel2 = new Model_Category_Level2();
             poCategoryLevel2.setApplicationDriver(poGRider);
             poCategoryLevel2.setXML("Model_Category_Level2");
-            poCategoryLevel2.setTableName("Category_Level3");
+            poCategoryLevel2.setTableName("Category_Level2");
             poCategoryLevel2.initialize();
 
             //Category Level 3
@@ -140,12 +140,13 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category Category() {
-        if (!"".equals((String) getValue("sCategrCd"))) {
+        System.out.println("xxxx = " + (String) getValue("sCategCd1") ); 
+        if (!"".equals((String) getValue("sCategCd1"))) {
             if (poCategory.getEditMode() == EditMode.READY
-                    && poCategory.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                    && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
                 return poCategory;
             } else {
-                poJSON = poCategory.openRecord((String) getValue("sCategrCd"));
+                poJSON = poCategory.openRecord((String) getValue("sCategCd1"));
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategory;
@@ -161,13 +162,12 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category_Level2 CategoryLevel2() {
-        System.out.println("xxxx = " + (String) getValue("sCategrCd") ); 
-        if (!"".equals((String) getValue("sCategrCd"))) {
+        if (!"".equals((String) getValue("sCategCd2"))) {
             if (poCategoryLevel2.getEditMode() == EditMode.READY
-                    && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                    && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategCd2"))) {
                 return poCategoryLevel2;
             } else {
-                poJSON = poCategoryLevel2.openRecord((String) getValue("sCategrCd"));
+                poJSON = poCategoryLevel2.openRecord((String) getValue("sCategCd2"));
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel2;
@@ -183,12 +183,12 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category_Level3 CategoryLevel3() {
-        if (!"".equals((String) getValue("sCategrCd"))) {
+        if (!"".equals((String) getValue("sCategCd3"))) {
             if (poCategoryLevel3.getEditMode() == EditMode.READY
-                    && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                    && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategCd3"))) {
                 return poCategoryLevel3;
             } else {
-                poJSON = poCategoryLevel3.openRecord((String) getValue("sCategrCd"));
+                poJSON = poCategoryLevel3.openRecord((String) getValue("sCategCd3"));
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel3;
@@ -204,12 +204,12 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category_Level4 CategoryLevel4() {
-        if (!"".equals((String) getValue("sCategrCd"))) {
+        if (!"".equals((String) getValue("sCategCd4"))) {
             if (poCategoryLevel4.getEditMode() == EditMode.READY
-                    && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                    && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategCd4"))) {
                 return poCategoryLevel4;
             } else {
-                poJSON = poCategoryLevel4.openRecord((String) getValue("sCategrCd"));
+                poJSON = poCategoryLevel4.openRecord((String) getValue("sCategCd4"));
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel4;
@@ -225,12 +225,12 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Brand Brand() {
-        if (!"".equals((String) getValue("sBrandIdx"))) {
+        if (!"".equals((String) getValue("sBrandIDx"))) {
             if (poBrand.getEditMode() == EditMode.READY
-                    && poBrand.getBrandId().equals((String) getValue("sBrandIdx"))) {
+                    && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
                 return poBrand;
             } else {
-                poJSON = poBrand.openRecord((String) getValue("sBrandIdx"));
+                poJSON = poBrand.openRecord((String) getValue("sBrandIDx"));
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poBrand;
@@ -309,6 +309,7 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Inv_Type InventoryType() {
+        System.out.println("InventoryType = " + (String) getValue("sInvTypCd") ); 
         if (!"".equals((String) getValue("sInvTypCd"))) {
             if (poInventoryType.getEditMode() == EditMode.READY
                     && poInventoryType.getInventoryTypeId().equals((String) getValue("sInvTypCd"))) {
