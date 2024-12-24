@@ -393,6 +393,9 @@ public class Inventory extends Parameter{
                     " LEFT JOIN Category_Level4 i ON a.sCategCd4 = i.sCategrCd" +
                     " LEFT JOIN Inv_Type j ON a.sInvTypCd = j.sInvTypCd";
         
+        
+        System.out.println("query natin to = = " + lsSQL );
+        
         if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
         
         return lsSQL;
