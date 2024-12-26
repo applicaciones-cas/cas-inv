@@ -18,6 +18,7 @@ import org.guanzon.cas.parameter.model.Model_Color;
 import org.guanzon.cas.parameter.model.Model_Inv_Type;
 import org.guanzon.cas.parameter.model.Model_Measure;
 import org.guanzon.cas.parameter.model.Model_Model;
+import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inventory extends Model {
@@ -68,70 +69,17 @@ public class Model_Inventory extends Model {
             ID = poEntity.getMetaData().getColumnLabel(1);
 
             //initialize other connections
-            //Category 
-            poCategory = new Model_Category();
-            poCategory.setApplicationDriver(poGRider);
-            poCategory.setXML("Model_Category");
-            poCategory.setTableName("Category");
-            poCategory.initialize();
-
-            //Category Level 2
-            poCategoryLevel2 = new Model_Category_Level2();
-            poCategoryLevel2.setApplicationDriver(poGRider);
-            poCategoryLevel2.setXML("Model_Category_Level2");
-            poCategoryLevel2.setTableName("Category_Level2");
-            poCategoryLevel2.initialize();
-
-            //Category Level 3
-            poCategoryLevel3 = new Model_Category_Level3();
-            poCategoryLevel3.setApplicationDriver(poGRider);
-            poCategoryLevel3.setXML("Model_Category_Level3");
-            poCategoryLevel3.setTableName("Category_Level3");
-            poCategoryLevel3.initialize();
-
-            //Category Level 4
-            poCategoryLevel4 = new Model_Category_Level4();
-            poCategoryLevel4.setApplicationDriver(poGRider);
-            poCategoryLevel4.setXML("Model_Category_Level4");
-            poCategoryLevel4.setTableName("Category_Level4");
-            poCategoryLevel4.initialize();
-
-            //Brand
-            poBrand = new Model_Brand();
-            poBrand.setApplicationDriver(poGRider);
-            poBrand.setXML("Model_Brand");
-            poBrand.setTableName("Brand");
-            poBrand.initialize();
-
-            //Model
-            poModel = new Model_Model();
-            poModel.setApplicationDriver(poGRider);
-            poModel.setXML("Model_Model");
-            poModel.setTableName("Model");
-            poModel.initialize();
-
-            //Color
-            poColor = new Model_Color();
-            poColor.setApplicationDriver(poGRider);
-            poColor.setXML("Model_Color");
-            poColor.setTableName("Color");
-            poColor.initialize();
-
-            //Measure
-            poMeasure = new Model_Measure();
-            poMeasure.setApplicationDriver(poGRider);
-            poMeasure.setXML("Model_Measure");
-            poMeasure.setTableName("Measure");
-            poMeasure.initialize();
-
-            //Inventory Type
-            poInventoryType = new Model_Inv_Type();
-            poInventoryType.setApplicationDriver(poGRider);
-            poInventoryType.setXML("Model_Inv_Type");
-            poInventoryType.setTableName("Inv_Type");
-            poInventoryType.initialize();
-            //end - initialize other connections
-
+            ParamModels model = new ParamModels(poGRider);
+            poCategory = model.Category();
+            poCategoryLevel2 = model.Category2();
+            poCategoryLevel3 = model.Category3();
+            poCategoryLevel4 = model.Category4();
+            poBrand = model.Brand();
+            poModel = model.Model();
+            poColor = model.Color();
+            poMeasure = model.Measurement();
+            poInventoryType = model.InventoryType();
+            
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -140,7 +88,6 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category Category() {
-        System.out.println("xxxx = " + (String) getValue("sCategCd1") ); 
         if (!"".equals((String) getValue("sCategCd1"))) {
             if (poCategory.getEditMode() == EditMode.READY
                     && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
@@ -442,52 +389,52 @@ public class Model_Inventory extends Model {
         return (String) getValue("sInvTypCd");
     }
 
-    public JSONObject setCost(double cost) {
+    public JSONObject setCost(Number cost) {
         return setValue("nUnitPrce", cost);
     }
 
-    public double getCost() {
-        return (double) getValue("nUnitPrce");
+    public Number getCost() {
+        return (Number) getValue("nUnitPrce");
     }
 
-    public JSONObject setSellingPrice(double sellingPrice) {
+    public JSONObject setSellingPrice(Number sellingPrice) {
         return setValue("nSelPrice", sellingPrice);
     }
 
-    public double getSellingPrice() {
-        return (double) getValue("nSelPrice");
+    public Number getSellingPrice() {
+        return (Number) getValue("nSelPrice");
     }
 
-    public JSONObject setDiscountRateLevel1(double discountRate) {
+    public JSONObject setDiscountRateLevel1(Number discountRate) {
         return setValue("nDiscLev1", discountRate);
     }
 
-    public double getDiscountRateLevel1() {
-        return (double) getValue("nDiscLev1");
+    public Number getDiscountRateLevel1() {
+        return (Number) getValue("nDiscLev1");
     }
 
-    public JSONObject setDiscountRateLevel2(double discountRate) {
+    public JSONObject setDiscountRateLevel2(Number discountRate) {
         return setValue("nDiscLev2", discountRate);
     }
 
-    public double getDiscountRateLevel2() {
-        return (double) getValue("nDiscLev2");
+    public Number getDiscountRateLevel2() {
+        return (Number) getValue("nDiscLev2");
     }
 
-    public JSONObject setDiscountRateLevel3(double discountRate) {
+    public JSONObject setDiscountRateLevel3(Number discountRate) {
         return setValue("nDiscLev3", discountRate);
     }
 
-    public double getDiscountRateLevel3() {
-        return (double) getValue("nDiscLev3");
+    public Number getDiscountRateLevel3() {
+        return (Number) getValue("nDiscLev3");
     }
 
-    public JSONObject setDealerDiscountRate(double discountRate) {
+    public JSONObject setDealerDiscountRate(Number discountRate) {
         return setValue("nDealrDsc", discountRate);
     }
 
-    public double getDealerDiscountRate() {
-        return (double) getValue("nDealrDsc");
+    public Number getDealerDiscountRate() {
+        return (Number) getValue("nDealrDsc");
     }
 
     public JSONObject setMinimumInventoryLevel(int quantity) {
