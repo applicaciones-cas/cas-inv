@@ -185,7 +185,7 @@ public class Model_Inv_Classification_Master extends Model{
     }
     
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4) {
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
