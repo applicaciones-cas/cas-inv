@@ -5,22 +5,17 @@ import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
-import org.guanzon.appdriver.constant.InventoryClassification;
-import org.guanzon.appdriver.constant.Logical;
-import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Branch;
-import org.guanzon.cas.parameter.model.Model_Inv_Location;
 import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inv_Master extends Model{      
+public class Model_Inv_Ledger extends Model{      
     //reference objects
     Model_Branch poBranch;
     Model_Warehouse poWarehouse;
     Model_Inventory poInventory;
-    Model_Inv_Location poLocation;
     
     @Override
     public void initialize() {
@@ -33,22 +28,17 @@ public class Model_Inv_Master extends Model{
             MiscUtil.initRowSet(poEntity);
             
             //assign default values
-            poEntity.updateObject("dAcquired", "0000-00-00");
-            poEntity.updateObject("dBegInvxx", "0000-00-00");
-            poEntity.updateObject("nBegQtyxx", 0);
-            poEntity.updateObject("nQtyOnHnd", 0);
             poEntity.updateObject("nLedgerNo", 0);
-            poEntity.updateObject("nMinLevel", 0);
-            poEntity.updateObject("nMaxLevel", 0);
-            poEntity.updateObject("nAvgMonSl", 0);
-            poEntity.updateObject("nAvgCostx", 0.00);
-            poEntity.updateString("cClassify", InventoryClassification.NEW_ITEMS);
-            poEntity.updateObject("nBackOrdr", 0);
-            poEntity.updateObject("nResvOrdr", 0);
-            poEntity.updateObject("nFloatQty", 0);
-            poEntity.updateObject("dLastTran", "0000-00-00");
-            poEntity.updateString("cPrimaryx", Logical.NO);
-            poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
+            poEntity.updateObject("dTransact", "0000-00-00");
+            poEntity.updateObject("nQtyOnHnd", 0);
+            poEntity.updateObject("nQtyInxxx", 0);
+            poEntity.updateObject("nQtyOutxx", 0);
+            poEntity.updateObject("nQtyOrder", 0);
+            poEntity.updateObject("nQtyIssue", 0);
+            poEntity.updateObject("nPurPrice", 0.00);
+            poEntity.updateObject("nUnitPrce", 0.00);
+            poEntity.updateObject("nQtyOnHnd", 0);
+            poEntity.updateObject("dExpiryxx", "0000-00-00");
             //end - assign default values
 
             poEntity.insertRow();
@@ -58,12 +48,14 @@ public class Model_Inv_Master extends Model{
 
             ID = "sStockIDx";
             ID2 = "sBranchCd";
+            ID3 = "sWHouseID";
+            ID4 = "sSourceCd";
+            ID5 = "sSourceNo";
             
             //initialize reference objects
             ParamModels model = new ParamModels(poGRider);
             poBranch = model.Branch();
             poWarehouse = model.Warehouse();
-            poLocation = model.InventoryLocation();
             
             poInventory = new InvModels(poGRider).Inventory();
             //end - initialize reference objects
@@ -99,142 +91,102 @@ public class Model_Inv_Master extends Model{
         return (String) getValue("sWHouseID");
     }
     
-    public JSONObject setLocationId(String briefDescription){
-        return setValue("sLocatnID", briefDescription);
+    public JSONObject setLedgerNo(String ledgerNo){
+        return setValue("nLedgerNo", ledgerNo);
     }
     
-    public String getLocationId(){
-        return (String) getValue("sLocatnID");
-    }
-    
-    public JSONObject setBinId(String binId){
-        return setValue("sBinNumbr", binId);
-    }
-    
-    public String getBinId(){
-        return (String) getValue("sBinNumbr");
-    }
-    
-    public JSONObject setDateAcquired(Date dateAcquired){
-        return setValue("dAcquired", dateAcquired);
-    }
-    
-    public Date getDateAcquired(){
-        return (Date) getValue("dAcquired");
-    }
-    
-    public JSONObject setBeginningInventoryDate(Date beginningInventoryDate){
-        return setValue("dBegInvxx", beginningInventoryDate);
-    }
-    
-    public Date getBeginningInventoryDate(){
-        return (Date) getValue("dBegInvxx");
-    }
-    
-    public JSONObject setBeginningInventoryQuantity(int beginningInventoryQuantity){
-        return setValue("nBegQtyxx", beginningInventoryQuantity);
-    }
-    
-    public int getBeginningInventoryQuantity(){
-        return (int) getValue("nBegQtyxx");
-    }   
-    
-    public JSONObject setQuantityOnHand(int quantityOnHand){
-        return setValue("nBegQtyxx", quantityOnHand);
-    }
-    
-    public int getQuantityOnHand(){
-        return (int) getValue("nBegQtyxx");
-    }  
-    
-    public JSONObject setLedgerCount(int ledgerCount){
-        return setValue("nLedgerNo", ledgerCount);
-    }
-    
-    public int getLedgerCount(){
+    public int getLedgerNo(){
         return (int) getValue("nLedgerNo");
-    }   
-    
-    public JSONObject setMinimumLevel(int minimumInventoryLevel){
-        return setValue("nMinLevel", minimumInventoryLevel);
     }
     
-    public int getMinimumLevel(){
-        return (int) getValue("nMinLevel");
-    }   
-    
-    public JSONObject setMaximumLevel(int maximumInventoryLevel){
-        return setValue("nMaxLevel", maximumInventoryLevel);
+    public JSONObject setTransactionDate(Date transactionDate){
+        return setValue("dTransact", transactionDate);
     }
     
-    public int getMaximumLevel(){
-        return (int) getValue("nMaxLevel");
-    }   
-    
-    public JSONObject setAverageMonthlySale(int averageMonthlySale){
-        return setValue("nMaxLevel", averageMonthlySale);
+    public Date getTransactionDate(){
+        return (Date) getValue("dTransact");
     }
     
-    public int getAverageMonthlySales(){
-        return (int) getValue("nMaxLevel");
-    }   
-    
-    public JSONObject setAverageCost(double averageCost){
-        return setValue("nAvgCostx", averageCost);
+    public JSONObject setSourceCode(String sourceCode){
+        return setValue("sSourceCd", sourceCode);
     }
     
-    public double getAverageCost(){
-        return (double) getValue("nAvgCostx");
-    }   
-    
-    public JSONObject setInventoryClassification(String inventoryClassification){
-        return setValue("cClassify", inventoryClassification);
+    public String getSourceCode(){
+        return (String) getValue("sSourceCd");
     }
     
-    public String getInventoryClassification(){
-        return (String) getValue("cClassify");
+    public JSONObject setSourceNo(String sourceNumber){
+        return setValue("sSourceNo", sourceNumber);
     }
     
-    public JSONObject setBackOrderQuantity(int backOrderQuantity){
-        return setValue("nBackOrdr", backOrderQuantity);
+    public String getSourceNo(){
+        return (String) getValue("sSourceNo");
     }
     
-    public int getBackOrderQuantity(){
-        return (int) getValue("nBackOrdr");
-    }   
-    
-    public JSONObject setReserveOrderQuantity(int reserveOrderQuantity){
-        return setValue("nResvOrdr", reserveOrderQuantity);
+    public JSONObject setQuantityIn(int quantity){
+        return setValue("nQtyInxxx", quantity);
     }
     
-    public int getReserveOrderQuantity(){
-        return (int) getValue("nResvOrdr");
-    }   
-    
-    public JSONObject setFloatQuantity(int reserveQuantity){
-        return setValue("nFloatQty", reserveQuantity);
+    public String getQuantityIn(){
+        return (String) getValue("nQtyInxxx");
     }
     
-    public int getFloatQuantity(){
-        return (int) getValue("nFloatQty");
-    }   
-    
-    public JSONObject setLastTransactionDate(Date lastTransactionDate){
-        return setValue("dLastTran", lastTransactionDate);
+    public JSONObject setQuantityOut(int quantity){
+        return setValue("nQtyOutxx", quantity);
     }
     
-    public Date getLastTransactionDate(){
-        return (Date) getValue("dLastTran");
+    public String getQuantityOut(){
+        return (String) getValue("nQtyOutxx");
     }
     
-    public JSONObject isPrimary(boolean isPrimary){
-        return setValue("cPrimaryx", isPrimary ? "1" : "0");
+    public JSONObject setQuantityOrder(int quantity){
+        return setValue("nQtyOrder", quantity);
     }
-
-    public boolean isPrimary(){
-        return ((String) getValue("cPrimaryx")).equals("1");
+    
+    public String getQuantityOrder(){
+        return (String) getValue("nQtyOrder");
+    }
+    
+    public JSONObject setQuantityIssued(int quantity){
+        return setValue("nQtyIssue", quantity);
+    }
+    
+    public String getQuantityIssued(){
+        return (String) getValue("nQtyIssue");
+    }
+    
+    public JSONObject setCost(double cost){
+        return setValue("nPurPrice", cost);
+    }
+    
+    public int getCost(){
+        return (int) getValue("nPurPrice");
+    }
+    
+    public JSONObject setSellingPrice(double sellingPrice){
+        return setValue("nUnitPrce", sellingPrice);
+    }
+    
+    public int getSellingPrice(){
+        return (int) getValue("nUnitPrce");
+    }
+    
+    public JSONObject setQuantityOnHand(int quantity){
+        return setValue("nQtyOnHnd", quantity);
+    }
+    
+    public String getQuantityOnHand(){
+        return (String) getValue("nQtyOnHnd");
     }
         
+    public JSONObject setExpirationDate(Date modifiedDate){
+        return setValue("dExpiryxx", modifiedDate);
+    }
+    
+    public Date getExpirationDate(){
+        return (Date) getValue("dExpiryxx");
+    }
+    
     public JSONObject setRecordStatus(String recordStatus){
         return setValue("cRecdStat", recordStatus);
     }
@@ -265,7 +217,31 @@ public class Model_Inv_Master extends Model{
     }
     
     @Override
-    public JSONObject openRecord(String Id1) {
+    public JSONObject openRecord(String id) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
@@ -312,27 +288,6 @@ public class Model_Inv_Master extends Model{
         } else {
             poWarehouse.initialize();
             return poWarehouse;
-        }
-    }
-    
-    public Model_Inv_Location Location() {
-        if (!"".equals((String) getValue("sLocatnID"))) {
-            if (poLocation.getEditMode() == EditMode.READY
-                    && poLocation.getLocationId().equals((String) getValue("sLocatnID"))) {
-                return poLocation;
-            } else {
-                poJSON = poLocation.openRecord((String) getValue("sLocatnID"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poLocation;
-                } else {
-                    poLocation.initialize();
-                    return poLocation;
-                }
-            }
-        } else {
-            poLocation.initialize();
-            return poLocation;
         }
     }
     
