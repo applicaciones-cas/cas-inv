@@ -1,5 +1,6 @@
 package org.guanzon.cas.inv;
 
+import org.guanzon.cas.inv.services.InvControllers;
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Parameter;
 import org.guanzon.appdriver.base.MiscUtil;
@@ -7,16 +8,49 @@ import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
+import org.guanzon.cas.parameter.Branch;
+import org.guanzon.cas.parameter.InvLocation;
+import org.guanzon.cas.parameter.services.ParamControllers;
+import org.guanzon.cas.parameter.Warehouse;
 import org.json.simple.JSONObject;
 
 public class Inv_Master extends Parameter{
+    //object model
     Model_Inv_Master poModel;
     
-    String psBranchCd;
+    //reference objects
+    ParamControllers poParams;
+    InvControllers poInv;
     
+    Branch poBranch;
+    InvLocation poLocation;
+    Inventory poInventory;
+    Warehouse poWarehouse;
+    //end - reference objects
+    
+    //optional only
+    String psBranchCd;
     public void setBranchCode(String branchCode){
         psBranchCd = branchCode;
     }
+    
+    //return reference objects
+    public Branch Branch(){
+        return poBranch;
+    }
+    
+    public InvLocation InvLocation(){
+        return poLocation;
+    }
+    
+    public Inventory Inventory(){
+        return poInventory;
+    }
+    
+    public Warehouse Warehouse(){
+        return poWarehouse;
+    }
+    //end - return reference objects
     
     @Override
     public void initialize() {
@@ -29,6 +63,16 @@ public class Inv_Master extends Parameter{
         poModel.initialize();
         
         psBranchCd = poGRider.getBranchCode();
+        
+        //initialize reference objects
+        poParams = new ParamControllers(poGRider, logwrapr);
+        poBranch = poParams.Branch();
+        poLocation = poParams.InventoryLocation();
+        poWarehouse = poParams.Warehouse();
+        
+        poInv = new InvControllers(poGRider, logwrapr);
+        poInventory = poInv.Inventory();
+        //end - initialize reference objects
     }
     
     @Override
@@ -66,6 +110,12 @@ public class Inv_Master extends Parameter{
                 return poJSON;
             }
             
+            if (poModel.getBinId().isEmpty()){
+                poJSON.put("result", "error");
+                poJSON.put("message", "Bin must not be empty.");
+                return poJSON;
+            }
+            
             //todo:
             //  more validations/use of validators per category
         }
@@ -89,14 +139,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»b.nQtyOnHnd»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecord(String value, 
@@ -113,14 +156,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecord(String value, 
@@ -139,14 +175,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecord(String value, 
@@ -167,14 +196,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordAttributes(String value, boolean byCode) {
@@ -186,14 +208,7 @@ public class Inv_Master extends Parameter{
                 "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordAttributes(String value, 
@@ -210,14 +225,7 @@ public class Inv_Master extends Parameter{
                 "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordAttributes(String value, 
@@ -236,14 +244,7 @@ public class Inv_Master extends Parameter{
                 "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordAttributes(String value, 
@@ -264,14 +265,7 @@ public class Inv_Master extends Parameter{
                 "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordWithMeasurement(String value, boolean byCode) {
@@ -283,14 +277,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordWithMeasurement(String value, 
@@ -307,14 +294,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordWithMeasurement(String value, 
@@ -333,14 +313,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     public JSONObject searchRecordWithMeasurement(String value, 
@@ -361,14 +334,7 @@ public class Inv_Master extends Parameter{
                 "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
-        if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
+        return openRecord(poJSON);
     }
     
     @Override
@@ -420,5 +386,27 @@ public class Inv_Master extends Parameter{
         if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
         
         return lsSQL;
+    }
+    
+    private JSONObject openRecord(JSONObject json){
+        if (json != null) {
+            poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+            
+            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+            
+            //load reference records
+            poInventory.openRecord("sStockIDx");
+            poBranch.openRecord("sBranchCd");
+            poWarehouse.openRecord("sWHouseID");
+            poLocation.openRecord("sLocatnID");
+            //end -load reference records
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+        
+        return poJSON;
     }
 }
