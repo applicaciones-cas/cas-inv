@@ -59,12 +59,20 @@ public class Model_Inv_Classification_Master extends Model{
         }
     }
     
-    public JSONObject setStockId(String stockId){
-        return setValue("sStockIDx", stockId);
+    public JSONObject setIndustryId(String industryId){
+        return setValue("sIndstCdx", industryId);
     }
     
-    public String getStockId(){
-        return (String) getValue("sStockIDx");
+    public String getIndustryId(){
+        return (String) getValue("sIndstCdx");
+    }
+    
+    public JSONObject setCategoryId(String categoryId){
+        return setValue("sCategrCd", categoryId);
+    }
+    
+    public String getCategoryId(){
+        return (String) getValue("sCategrCd");
     }
     
     public JSONObject setBranchCode(String branchCode){
@@ -75,116 +83,60 @@ public class Model_Inv_Classification_Master extends Model{
         return (String) getValue("sBranchCd");
     }
     
-    public JSONObject setWarehouseId(String warehouseId){
-        return setValue("sWHouseID", warehouseId);
+    public JSONObject setPeriod(String yyyyMM){
+        return setValue("sPeriodxx", yyyyMM);
     }
     
-    public String getWarehouseId(){
-        return (String) getValue("sWHouseID");
+    public int getPeriod(){
+        return (int) getValue("sPeriodxx");
     }
     
-    public JSONObject setLedgerNo(String ledgerNo){
-        return setValue("nLedgerNo", ledgerNo);
+    public JSONObject setTotalSales(int totalSalesQuantity){
+        return setValue("nTotlSale", totalSalesQuantity);
     }
     
-    public int getLedgerNo(){
-        return (int) getValue("nLedgerNo");
+    public Date getTotalSales(){
+        return (Date) getValue("nTotlSale");
+    }
+           
+    public JSONObject setTransactionStatus(String transactionStatus){
+        return setValue("cTranStat", transactionStatus);
     }
     
-    public JSONObject setTransactionDate(Date transactionDate){
-        return setValue("dTransact", transactionDate);
+    public String getTransactionStatus(){
+        return (String) getValue("cTranStat");
     }
     
-    public Date getTransactionDate(){
-        return (Date) getValue("dTransact");
+    public JSONObject setProcessorId(String processorId){
+        return setValue("sProcessd", processorId);
     }
     
-    public JSONObject setSourceCode(String sourceCode){
-        return setValue("sSourceCd", sourceCode);
+    public String getProcessorId(){
+        return (String) getValue("sProcessd");
     }
     
-    public String getSourceCode(){
-        return (String) getValue("sSourceCd");
+    public JSONObject setProcessedDate(Date processedDate){
+        return setValue("dProcessd", processedDate);
     }
     
-    public JSONObject setSourceNo(String sourceNumber){
-        return setValue("sSourceNo", sourceNumber);
+    public Date getProcessedDate(){
+        return (Date) getValue("dProcessd");
     }
     
-    public String getSourceNo(){
-        return (String) getValue("sSourceNo");
+    public JSONObject setPostedId(String postedById){
+        return setValue("sPostedxx", postedById);
     }
     
-    public JSONObject setQuantityIn(int quantity){
-        return setValue("nQtyInxxx", quantity);
+    public String getPostedId(){
+        return (String) getValue("sPostedxx");
     }
     
-    public String getQuantityIn(){
-        return (String) getValue("nQtyInxxx");
+    public JSONObject setPostingDate(Date postingDate){
+        return setValue("dPostedxx", postingDate);
     }
     
-    public JSONObject setQuantityOut(int quantity){
-        return setValue("nQtyOutxx", quantity);
-    }
-    
-    public String getQuantityOut(){
-        return (String) getValue("nQtyOutxx");
-    }
-    
-    public JSONObject setQuantityOrder(int quantity){
-        return setValue("nQtyOrder", quantity);
-    }
-    
-    public String getQuantityOrder(){
-        return (String) getValue("nQtyOrder");
-    }
-    
-    public JSONObject setQuantityIssued(int quantity){
-        return setValue("nQtyIssue", quantity);
-    }
-    
-    public String getQuantityIssued(){
-        return (String) getValue("nQtyIssue");
-    }
-    
-    public JSONObject setCost(double cost){
-        return setValue("nPurPrice", cost);
-    }
-    
-    public int getCost(){
-        return (int) getValue("nPurPrice");
-    }
-    
-    public JSONObject setSellingPrice(double sellingPrice){
-        return setValue("nUnitPrce", sellingPrice);
-    }
-    
-    public int getSellingPrice(){
-        return (int) getValue("nUnitPrce");
-    }
-    
-    public JSONObject setQuantityOnHand(int quantity){
-        return setValue("nQtyOnHnd", quantity);
-    }
-    
-    public String getQuantityOnHand(){
-        return (String) getValue("nQtyOnHnd");
-    }
-        
-    public JSONObject setExpirationDate(Date modifiedDate){
-        return setValue("dExpiryxx", modifiedDate);
-    }
-    
-    public Date getExpirationDate(){
-        return (Date) getValue("dExpiryxx");
-    }
-    
-    public JSONObject setRecordStatus(String recordStatus){
-        return setValue("cRecdStat", recordStatus);
-    }
-    
-    public String getRecordStatus(){
-        return (String) getValue("cRecdStat");
+    public Date getPostingDate(){
+        return (Date) getValue("dPostedxx");
     }
     
     public JSONObject setModifyingId(String modifyingId){
@@ -262,5 +214,46 @@ public class Model_Inv_Classification_Master extends Model{
         }
     }
     
+    public Model_Category Industry() {
+        if (!"".equals((String) getValue("sIndstCdx"))) {
+            if (poIndustry.getEditMode() == EditMode.READY
+                    && poIndustry.getCategoryId().equals((String) getValue("sIndstCdx"))) {
+                return poIndustry;
+            } else {
+                poJSON = poIndustry.openRecord((String) getValue("sIndstCdx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poIndustry;
+                } else {
+                    poIndustry.initialize();
+                    return poIndustry;
+                }
+            }
+        } else {
+            poIndustry.initialize();
+            return poIndustry;
+        }
+    }
+    
+    public Model_Category_Level2 Category() {
+        if (!"".equals((String) getValue("sCategrCd"))) {
+            if (poCategory.getEditMode() == EditMode.READY
+                    && poCategory.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                return poCategory;
+            } else {
+                poJSON = poCategory.openRecord((String) getValue("sCategrCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategory;
+                } else {
+                    poCategory.initialize();
+                    return poCategory;
+                }
+            }
+        } else {
+            poCategory.initialize();
+            return poCategory;
+        }
+    }
     //end - reference object models
 }
