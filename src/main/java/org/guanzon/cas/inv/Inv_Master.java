@@ -26,13 +26,15 @@ public class Inv_Master extends Parameter{
     InvLocation poLocation;
     Inventory poInventory;
     Warehouse poWarehouse;
+    //end - reference objects
     
+    //optional only
     String psBranchCd;
-    
     public void setBranchCode(String branchCode){
         psBranchCd = branchCode;
     }
     
+    //return reference objects
     public Branch Branch(){
         return poBranch;
     }
@@ -48,6 +50,7 @@ public class Inv_Master extends Parameter{
     public Warehouse Warehouse(){
         return poWarehouse;
     }
+    //end - return reference objects
     
     @Override
     public void initialize() {
