@@ -12,22 +12,23 @@ import org.guanzon.cas.parameter.model.Model_Category_Level2;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inv_Classification_Master extends Model{      
+public class Model_Inv_Classification_Master extends Model {
+
     //reference objects
     Model_Branch poBranch;
     Model_Category poIndustry;
     Model_Category_Level2 poCategory;
-    
+
     @Override
     public void initialize() {
         try {
             poEntity = MiscUtil.xml2ResultSet(System.getProperty("sys.default.path.metadata") + XML, getTable());
-            
+
             poEntity.last();
             poEntity.moveToInsertRow();
 
             MiscUtil.initRowSet(poEntity);
-            
+
             //assign default values
             poEntity.updateObject("nTotlSale", 0);
             poEntity.updateObject("cTranStat", TransactionStatus.STATE_OPEN);
@@ -51,115 +52,115 @@ public class Model_Inv_Classification_Master extends Model{
             poIndustry = model.Category();
             poCategory = model.Category2();
             //end - initialize reference objects
-            
+
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
             System.exit(1);
         }
     }
-    
-    public JSONObject setIndustryId(String industryId){
+
+    public JSONObject setIndustryId(String industryId) {
         return setValue("sIndstCdx", industryId);
     }
-    
-    public String getIndustryId(){
+
+    public String getIndustryId() {
         return (String) getValue("sIndstCdx");
     }
-    
-    public JSONObject setCategoryId(String categoryId){
+
+    public JSONObject setCategoryId(String categoryId) {
         return setValue("sCategrCd", categoryId);
     }
-    
-    public String getCategoryId(){
+
+    public String getCategoryId() {
         return (String) getValue("sCategrCd");
     }
-    
-    public JSONObject setBranchCode(String branchCode){
+
+    public JSONObject setBranchCode(String branchCode) {
         return setValue("sBranchCd", branchCode);
     }
-    
-    public String getBranchCode(){
+
+    public String getBranchCode() {
         return (String) getValue("sBranchCd");
     }
-    
-    public JSONObject setPeriod(String yyyyMM){
+
+    public JSONObject setPeriod(String yyyyMM) {
         return setValue("sPeriodxx", yyyyMM);
     }
-    
-    public int getPeriod(){
-        return (int) getValue("sPeriodxx");
+
+    public String getPeriod() {
+        return (String) getValue("sPeriodxx");
     }
-    
-    public JSONObject setTotalSales(int totalSalesQuantity){
+
+    public JSONObject setTotalSales(int totalSalesQuantity) {
         return setValue("nTotlSale", totalSalesQuantity);
     }
-    
-    public Date getTotalSales(){
-        return (Date) getValue("nTotlSale");
+
+    public int getTotalSales() {
+        return (int) getValue("nTotlSale");
     }
-           
-    public JSONObject setTransactionStatus(String transactionStatus){
+
+    public JSONObject setTransactionStatus(String transactionStatus) {
         return setValue("cTranStat", transactionStatus);
     }
-    
-    public String getTransactionStatus(){
+
+    public String getTransactionStatus() {
         return (String) getValue("cTranStat");
     }
-    
-    public JSONObject setProcessorId(String processorId){
+
+    public JSONObject setProcessorId(String processorId) {
         return setValue("sProcessd", processorId);
     }
-    
-    public String getProcessorId(){
+
+    public String getProcessorId() {
         return (String) getValue("sProcessd");
     }
-    
-    public JSONObject setProcessedDate(Date processedDate){
+
+    public JSONObject setProcessedDate(Date processedDate) {
         return setValue("dProcessd", processedDate);
     }
-    
-    public Date getProcessedDate(){
+
+    public Date getProcessedDate() {
         return (Date) getValue("dProcessd");
     }
-    
-    public JSONObject setPostedId(String postedById){
+
+    public JSONObject setPostedId(String postedById) {
         return setValue("sPostedxx", postedById);
     }
-    
-    public String getPostedId(){
+
+    public String getPostedId() {
         return (String) getValue("sPostedxx");
     }
-    
-    public JSONObject setPostingDate(Date postingDate){
+
+    public JSONObject setPostingDate(Date postingDate) {
         return setValue("dPostedxx", postingDate);
     }
-    
-    public Date getPostingDate(){
+
+    public Date getPostingDate() {
         return (Date) getValue("dPostedxx");
     }
-    
-    public JSONObject setModifyingId(String modifyingId){
+
+    public JSONObject setModifyingId(String modifyingId) {
         return setValue("sModified", modifyingId);
     }
-    
-    public String getModifyingId(){
+
+    public String getModifyingId() {
         return (String) getValue("sModified");
     }
-    
-    public JSONObject setModifiedDate(Date modifiedDate){
+
+    public JSONObject setModifiedDate(Date modifiedDate) {
         return setValue("dModified", modifiedDate);
     }
-    
-    public Date getModifiedDate(){
+
+    public Date getModifiedDate() {
         return (Date) getValue("dModified");
     }
-    
+
     @Override
     public String getNextCode() {
         return "";
     }
-    
+
     @Override
     public JSONObject openRecord(String id) {
         JSONObject loJSON = new JSONObject();
@@ -167,7 +168,7 @@ public class Model_Inv_Classification_Master extends Model{
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
     public JSONObject openRecord(String Id1, Object Id2) {
         JSONObject loJSON = new JSONObject();
@@ -175,7 +176,7 @@ public class Model_Inv_Classification_Master extends Model{
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
     public JSONObject openRecord(String Id1, Object Id2, Object Id3) {
         JSONObject loJSON = new JSONObject();
@@ -183,7 +184,7 @@ public class Model_Inv_Classification_Master extends Model{
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
     public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5) {
         JSONObject loJSON = new JSONObject();
@@ -191,7 +192,7 @@ public class Model_Inv_Classification_Master extends Model{
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     //reference object models
     public Model_Branch Branch() {
         if (!"".equals((String) getValue("sBranchCd"))) {
@@ -213,7 +214,7 @@ public class Model_Inv_Classification_Master extends Model{
             return poBranch;
         }
     }
-    
+
     public Model_Category Industry() {
         if (!"".equals((String) getValue("sIndstCdx"))) {
             if (poIndustry.getEditMode() == EditMode.READY
@@ -234,7 +235,7 @@ public class Model_Inv_Classification_Master extends Model{
             return poIndustry;
         }
     }
-    
+
     public Model_Category_Level2 Category() {
         if (!"".equals((String) getValue("sCategrCd"))) {
             if (poCategory.getEditMode() == EditMode.READY
