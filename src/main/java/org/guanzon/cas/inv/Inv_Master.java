@@ -2,9 +2,11 @@ package org.guanzon.cas.inv;
 
 import org.guanzon.cas.inv.services.InvControllers;
 import org.guanzon.appdriver.agent.ShowDialogFX;
+import org.guanzon.appdriver.agent.ShowMessageFX;
 import org.guanzon.appdriver.agent.services.Parameter;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
@@ -368,7 +370,6 @@ public class Inv_Master extends Parameter{
                     ", IFNULL(h.sDescript, '') xCategNm3" +
                     ", IFNULL(i.sDescript, '') xCategNm4" +
                     ", IFNULL(j.sDescript, '') xInvTypNm" +
-                    ", b.nQtyOnHnd" +
                 " FROM Inventory a" +
                         " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx" +
                         " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx" +
@@ -380,8 +381,7 @@ public class Inv_Master extends Parameter{
                         " LEFT JOIN Category_Level4 i ON a.sCategCd4 = i.sCategrCd" +
                         " LEFT JOIN Inv_Type j ON a.sInvTypCd = j.sInvTypCd" +
                     ", Inv_Master k" + 
-                " WHERE a.sStockIDx = k.sStockIDx" +
-                    " AND k.sBranchCd = " + SQLUtil.toSQL(psBranchCd);
+                " WHERE a.sStockIDx = k.sStockIDx" ;
         
         if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
         
@@ -390,9 +390,30 @@ public class Inv_Master extends Parameter{
     
     private JSONObject openRecord(JSONObject json){
         if (json != null) {
-            poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+             System.out.println("stockid == " + (String) poJSON.get("sStockIDx"));
+             String lsStockID = (String) poJSON.get("sStockIDx");
+           poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+           if ("error".equals((String) poJSON.get("result"))){
+               if ((String) poJSON.get("sBranchCd") == null){
+                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
+                   System.out.println("stockid == " + lsStockID);
+                poJSON = poInventory.openRecord((String) poJSON.get("sStockIDx"));
+//                EditMode.ADDNEW;
+                } 
+                return poJSON;
+            }
             
-            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+            
+            
+            else {
+                poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+            }
+            
+//            if ("error".equals((String)poJSON.get("result"))){
+//                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
+//                 poJSON = newRecord();
+//            
+//            }
             
             //load reference records
             poInventory.openRecord("sStockIDx");
@@ -409,4 +430,17 @@ public class Inv_Master extends Parameter{
         
         return poJSON;
     }
+        public JSONObject searchRecordwithBarrcode(String value, boolean byCode) {
+            System.out.println("getSQB = " + getSQ_Browse());
+        poJSON = ShowDialogFX.Search(poGRider,
+                getSQ_Browse(),
+                value,
+                "BarCode»Description»Selling Price»ID",
+                "sBarCodex»sDescript»nSelPrice»sStockIDx",
+                "a.sBarCodex»a.sDescript»a.nSelPrice»a.sStockIDx",
+                byCode ? 0 : 1);
+
+        return openRecord(poJSON);
+    }
+    
 }

@@ -15,7 +15,7 @@ import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inv_Master extends Model{      
+public class Model_Inv_Stock_Request_Master extends Model{      
     //reference objects
     Model_Branch poBranch;
     Model_Warehouse poWarehouse;
@@ -264,13 +264,13 @@ public class Model_Inv_Master extends Model{
         return "";
     }
     
-//    @Override
-//    public JSONObject openRecord(String Id1) {
-//        JSONObject loJSON = new JSONObject();
-//        loJSON.put("result", "error");
-//        loJSON.put("message", "This feature is not supported.");
-//        return loJSON;
-//    }
+    @Override
+    public JSONObject openRecord(String Id1) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
     
     //reference object models
     public Model_Branch Branch() {
