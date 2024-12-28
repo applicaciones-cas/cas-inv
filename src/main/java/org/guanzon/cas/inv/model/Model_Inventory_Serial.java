@@ -21,8 +21,8 @@ import org.guanzon.cas.parameter.model.Model_Model;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inventory extends Model {
-
+public class Model_Inventory_Serial extends Model {
+    private Model_Inventory poInventory;
     private Model_Category poCategory;
     private Model_Category_Level2 poCategoryLevel2;
     private Model_Category_Level3 poCategoryLevel3;
@@ -44,21 +44,8 @@ public class Model_Inventory extends Model {
             MiscUtil.initRowSet(poEntity);
 
             //assign default values
-            poEntity.updateObject("nUnitPrce", 0.00);
-            poEntity.updateObject("nSelPrice", 0.00);
-            poEntity.updateObject("nDiscLev1", 0.00);
-            poEntity.updateObject("nDiscLev2", 0.00);
-            poEntity.updateObject("nDiscLev3", 0.00);
-            poEntity.updateObject("nDealrDsc", 0.00);
-            poEntity.updateObject("nMinLevel", 0);
-            poEntity.updateObject("nMaxLevel", 0);
-            poEntity.updateObject("nShlfLife", 0);
-            poEntity.updateString("cComboInv", Logical.NO);
-            poEntity.updateString("cWthPromo", Logical.NO);
-            poEntity.updateString("cSerialze", Logical.NO);
-            poEntity.updateString("cUnitType", Logical.NO);
-            poEntity.updateString("cInvStatx", RecordStatus.ACTIVE);
-            poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
+
+            poEntity.updateString("cSoldStat", RecordStatus.INACTIVE);
             //end - assign default values
 
             poEntity.insertRow();
@@ -80,6 +67,14 @@ public class Model_Inventory extends Model {
             poMeasure = model.Measurement();
             poInventoryType = model.InventoryType();
             
+            //Inventory 
+            poInventory = new Model_Inventory();
+            poInventory.setApplicationDriver(poGRider);
+            poInventory.setXML("Model_Inventory");
+            poInventory.setTableName("Inventory");
+            poInventory.initialize(); 
+            //end - initialize other connections
+
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -87,6 +82,28 @@ public class Model_Inventory extends Model {
         }
     }
 
+    public Model_Inventory Inventory() {
+        System.out.println("xxxx = " + (String) getValue("sStockIDx") ); 
+        if (!"".equals((String) getValue("sStockIDx"))) {
+            if (poInventory.getEditMode() == EditMode.READY
+                    && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {
+                return poInventory;
+            } else {
+                poJSON = poInventory.openRecord((String) getValue("sStockIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poInventory;
+                } else {
+                    poInventory.initialize();
+                    return poInventory;
+                }
+            }
+        } else {
+            poInventory.initialize();
+            return poInventory;
+        }
+    }
+    
     public Model_Category Category() {
         if (!"".equals((String) getValue("sCategCd1"))) {
             if (poCategory.getEditMode() == EditMode.READY
@@ -277,6 +294,47 @@ public class Model_Inventory extends Model {
         }
     }
     
+    
+    public JSONObject setSerialId(String serialId) {
+        return setValue("sSerialID", serialId);
+    }
+
+    public String getSerialId() {
+        return (String) getValue("sSerialID");
+    }
+
+    public JSONObject setBranchCode(String branchCode) {
+        return setValue("sBranchCd", branchCode);
+    }
+
+    public String getBranchCode() {
+        return (String) getValue("sBranchCd");
+    }
+
+    public JSONObject setSerialOne(String serialOne) {
+        return setValue("sSerial01", serialOne);
+    }
+
+    public String getSerialOne() {
+        return (String) getValue("sSerial01");
+    }
+
+    public JSONObject setSerialTwo(String serialTwo) {
+        return setValue("sSerial02", serialTwo);
+    }
+
+    public String getSerialTwo() {
+        return (String) getValue("sSerial02");
+    }
+
+    public JSONObject setUnitPrice(String unitPrice) {
+        return setValue("nUnitPrce", unitPrice);
+    }
+
+    public String getUnitPrice() {
+        return (String) getValue("nUnitPrce");
+    }
+
     public JSONObject setStockId(String stockId) {
         return setValue("sStockIDx", stockId);
     }
@@ -285,196 +343,20 @@ public class Model_Inventory extends Model {
         return (String) getValue("sStockIDx");
     }
 
-    public JSONObject setBarCode(String barCode) {
-        return setValue("sBarCodex", barCode);
+    public JSONObject setLocationId(String locationId) {
+        return setValue("cLocation", locationId);
     }
 
-    public String getBarCode() {
-        return (String) getValue("sBarCodex");
+    public String getLocationId() {
+        return (String) getValue("cLocation");
+    }
+    
+    public JSONObject setSoldStatus(String soldStatus) {
+        return setValue("cSoldStat", soldStatus);
     }
 
-    public JSONObject setDescription(String description) {
-        return setValue("sDescript", description);
-    }
-
-    public String getDescription() {
-        return (String) getValue("sDescript");
-    }
-
-    public JSONObject setBriefDescription(String briefDescription) {
-        return setValue("sBriefDsc", briefDescription);
-    }
-
-    public String getBriefDescription() {
-        return (String) getValue("sBriefDsc");
-    }
-
-    public JSONObject setAlternateBarCode(String alternateBarCode) {
-        return setValue("sAltBarCd", alternateBarCode);
-    }
-
-    public String getAlternateBarCode() {
-        return (String) getValue("sAltBarCd");
-    }
-
-    public JSONObject setCategoryFirstLevelId(String cagetoryId) {
-        return setValue("sCategCd1", cagetoryId);
-    }
-
-    public String getCategoryFirstLevelId() {
-        return (String) getValue("sCategCd1");
-    }
-
-    public JSONObject setCategoryIdSecondLevel(String cagetoryId) {
-        return setValue("sCategCd2", cagetoryId);
-    }
-
-    public String getCategoryIdSecondLevel() {
-        return (String) getValue("sCategCd2");
-    }
-
-    public JSONObject setCategoryIdThirdLevel(String cagetoryId) {
-        return setValue("sCategCd3", cagetoryId);
-    }
-
-    public String getCategoryIdThirdLevel() {
-        return (String) getValue("sCategCd3");
-    }
-
-    public JSONObject setCategoryIdFourthLevel(String cagetoryId) {
-        return setValue("sCategCd4", cagetoryId);
-    }
-
-    public String getCategoryIdFourthLevel() {
-        return (String) getValue("sCategCd4");
-    }
-
-    public JSONObject setBrandId(String brandId) {
-        return setValue("sBrandIDx", brandId);
-    }
-
-    public String getBrandId() {
-        return (String) getValue("sBrandIDx");
-    }
-
-    public JSONObject setModelId(String brandId) {
-        return setValue("sModelIDx", brandId);
-    }
-
-    public String getModelId() {
-        return (String) getValue("sModelIDx");
-    }
-
-    public JSONObject setColorId(String brandId) {
-        return setValue("sColorIDx", brandId);
-    }
-
-    public String getColorId() {
-        return (String) getValue("sColorIDx");
-    }
-
-    public JSONObject setMeasurementId(String measurementId) {
-        return setValue("sMeasurID", measurementId);
-    }
-
-    public String getMeasurementId() {
-        return (String) getValue("sMeasurID");
-    }
-
-    public JSONObject setInventoryTypeId(String inventoryTypeId) {
-        return setValue("sInvTypCd", inventoryTypeId);
-    }
-
-    public String getInventoryTypeId() {
-        return (String) getValue("sInvTypCd");
-    }
-
-    public JSONObject setCost(Number cost) {
-        return setValue("nUnitPrce", cost);
-    }
-
-    public Number getCost() {
-        return (Number) getValue("nUnitPrce");
-    }
-
-    public JSONObject setSellingPrice(Number sellingPrice) {
-        return setValue("nSelPrice", sellingPrice);
-    }
-
-    public Number getSellingPrice() {
-        return (Number) getValue("nSelPrice");
-    }
-
-    public JSONObject setDiscountRateLevel1(Number discountRate) {
-        return setValue("nDiscLev1", discountRate);
-    }
-
-    public Number getDiscountRateLevel1() {
-        return (Number) getValue("nDiscLev1");
-    }
-
-    public JSONObject setDiscountRateLevel2(Number discountRate) {
-        return setValue("nDiscLev2", discountRate);
-    }
-
-    public Number getDiscountRateLevel2() {
-        return (Number) getValue("nDiscLev2");
-    }
-
-    public JSONObject setDiscountRateLevel3(Number discountRate) {
-        return setValue("nDiscLev3", discountRate);
-    }
-
-    public Number getDiscountRateLevel3() {
-        return (Number) getValue("nDiscLev3");
-    }
-
-    public JSONObject setDealerDiscountRate(Number discountRate) {
-        return setValue("nDealrDsc", discountRate);
-    }
-
-    public Number getDealerDiscountRate() {
-        return (Number) getValue("nDealrDsc");
-    }
-
-    public JSONObject setMinimumInventoryLevel(int quantity) {
-        return setValue("nMinLevel", quantity);
-    }
-
-    public int getMinimumInventoryLevel() {
-        return (int) getValue("nMinLevel");
-    }
-
-    public JSONObject setMaximumInventoryLevel(int quantity) {
-        return setValue("nMaxLevel", quantity);
-    }
-
-    public int getMaximumInventoryLevel() {
-        return (int) getValue("nMaxLevel");
-    }
-
-    public JSONObject isComboInventory(boolean isComboInventory) {
-        return setValue("cComboInv", isComboInventory ? "1" : "0");
-    }
-
-    public boolean isComboInventory() {
-        return ((String) getValue("cComboInv")).equals("1");
-    }
-
-    public JSONObject isWithPromo(boolean isWithPromo) {
-        return setValue("cWthPromo", isWithPromo ? "1" : "0");
-    }
-
-    public boolean isWithPromo() {
-        return ((String) getValue("cWthPromo")).equals("1");
-    }
-
-    public JSONObject isSerialized(boolean isSerialized) {
-        return setValue("cSerialze", isSerialized ? "1" : "0");
-    }
-
-    public boolean isSerialized() {
-        return ((String) getValue("cSerialze")).equals("1");
+    public String getSoldStatus() {
+        return (String) getValue("cSoldStat");
     }
 
     public JSONObject setUnitType(String unitType) {
@@ -485,44 +367,20 @@ public class Model_Inventory extends Model {
         return (String) getValue("cUnitType");
     }
 
-    public JSONObject setInventoryStatus(String inventoryStatus) {
-        return setValue("cInvStatx", inventoryStatus);
+    public JSONObject setCompnyId(String companyId) {
+        return setValue("sCompnyID", companyId);
     }
 
-    public String getInventoryStatus() {
-        return (String) getValue("cInvStatx");
+    public String getCompnyId() {
+        return (String) getValue("sCompnyID");
     }
 
-    public JSONObject setShelfLife(int days) {
-        return setValue("nShlfLife", days);
+    public JSONObject setWarranty(String warranty) {
+        return setValue("sWarranty", warranty);
     }
 
-    public int getShelfLife() {
-        return (int) getValue("nShlfLife");
-    }
-
-    public JSONObject setSupersededId(String supersededId) {
-        return setValue("sSupersed", supersededId);
-    }
-
-    public String getSupersededId() {
-        return (String) getValue("sSupersed");
-    }
-
-    public JSONObject setRecordStatus(String recordStatus) {
-        return setValue("cRecdStat", recordStatus);
-    }
-
-    public String getRecordStatus() {
-        return (String) getValue("cRecdStat");
-    }
-
-    public JSONObject setModifyingId(String modifyingId) {
-        return setValue("sModified", modifyingId);
-    }
-
-    public String getModifyingId() {
-        return (String) getValue("sModified");
+    public String getWarranty() {
+        return (String) getValue("sWarranty");
     }
 
     public JSONObject setModifiedDate(Date modifiedDate) {
