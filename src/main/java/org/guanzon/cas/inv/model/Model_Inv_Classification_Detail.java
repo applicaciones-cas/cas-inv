@@ -1,23 +1,22 @@
 package org.guanzon.cas.inv.model;
 
 import java.sql.SQLException;
-import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
-import org.guanzon.appdriver.constant.TransactionStatus;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.model.Model_Category;
 import org.guanzon.cas.parameter.model.Model_Category_Level2;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inv_Classification_Master extends Model {
+public class Model_Inv_Classification_Detail extends Model {
 
     //reference objects
     Model_Branch poBranch;
     Model_Category poIndustry;
     Model_Category_Level2 poCategory;
+    Model_Inventory poInventory;
 
     @Override
     public void initialize() {
@@ -30,12 +29,18 @@ public class Model_Inv_Classification_Master extends Model {
             MiscUtil.initRowSet(poEntity);
 
             //assign default values
-            poEntity.updateObject("nTotlSale", 0);
-            poEntity.updateObject("cTranStat", TransactionStatus.STATE_OPEN);
-            poEntity.updateObject("dProcessd", "0000-00-00 00:00:00");
-            poEntity.updateObject("dPostedxx", "0000-00-00 00:00:00");
+            poEntity.updateObject("nSoldQtyx", 0);
+            poEntity.updateObject("nAbnrmQty", 0);
+            poEntity.updateObject("nTotlSumx", 0);
+            poEntity.updateObject("nTotlSumP", 0.00);
+            poEntity.updateObject("nAveMonSl", 0);
+            poEntity.updateObject("nMaxSales", 0);
+            poEntity.updateObject("nAveShare", 0);
+            poEntity.updateObject("nTotOrder", 0);
+            poEntity.updateObject("nMinLevel", 0);
+            poEntity.updateObject("nMaxLevel", 0);
+            poEntity.updateObject("cClassify", "F");
             //end - assign default values
-
             poEntity.insertRow();
             poEntity.moveToCurrentRow();
 
@@ -45,6 +50,7 @@ public class Model_Inv_Classification_Master extends Model {
             ID2 = "sCategrCd";
             ID3 = "sBranchCd";
             ID4 = "sPeriodxx";
+            ID5 = "sStockIDx";
 
             //initialize reference objects
             ParamModels model = new ParamModels(poGRider);
@@ -92,68 +98,100 @@ public class Model_Inv_Classification_Master extends Model {
         return (String) getValue("sPeriodxx");
     }
 
-    public JSONObject setTotalSales(int totalSalesQuantity) {
-        return setValue("nTotlSale", totalSalesQuantity);
+    public JSONObject setStockId(String stockId) {
+        return setValue("sStockIDx", stockId);
     }
 
-    public int getTotalSales() {
-        return (int) getValue("nTotlSale");
+    public String getStockId() {
+        return (String) getValue("sStockIDx");
     }
 
-    public JSONObject setTransactionStatus(String transactionStatus) {
-        return setValue("cTranStat", transactionStatus);
+    public JSONObject setSoldQuantity(int soldQuantity) {
+        return setValue("nSoldQtyx", soldQuantity);
     }
 
-    public String getTransactionStatus() {
-        return (String) getValue("cTranStat");
+    public int getSoldQuantity() {
+        return (int) getValue("nSoldQtyx");
     }
 
-    public JSONObject setProcessorId(String processorId) {
-        return setValue("sProcessd", processorId);
+    public JSONObject setAbnrmQuantity(int abnrmQuantity) {
+        return setValue("nAbnrmQty", abnrmQuantity);
     }
 
-    public String getProcessorId() {
-        return (String) getValue("sProcessd");
+    public int getAbnrmQuantity() {
+        return (int) getValue("nAbnrmQty");
     }
 
-    public JSONObject setProcessedDate(Date processedDate) {
-        return setValue("dProcessd", processedDate);
+    public JSONObject setTotalQuantity(int totalQuantity) {
+        return setValue("nTotlSumx", totalQuantity);
     }
 
-    public Date getProcessedDate() {
-        return (Date) getValue("dProcessd");
+    public int getTotalQuantity() {
+        return (int) getValue("nTotlSumx");
     }
 
-    public JSONObject setPostedId(String postedById) {
-        return setValue("sPostedxx", postedById);
+    public JSONObject setTotalPQuantity(double totalPQuantity) {
+        return setValue("nTotlSumP", totalPQuantity);
     }
 
-    public String getPostedId() {
-        return (String) getValue("sPostedxx");
+    public double getTotalPQuantity() {
+        return (double) getValue("nTotlSumP");
     }
 
-    public JSONObject setPostingDate(Date postingDate) {
-        return setValue("dPostedxx", postingDate);
+    public JSONObject setAveMonSales(int aveMonSalesQuantity) {
+        return setValue("nAveMonSl", aveMonSalesQuantity);
     }
 
-    public Date getPostingDate() {
-        return (Date) getValue("dPostedxx");
+    public int getAveMonSales() {
+        return (int) getValue("nAveMonSl");
     }
 
-    public JSONObject setModifyingId(String modifyingId) {
-        return setValue("sModified", modifyingId);
+    public JSONObject setMaxSales(int maxSalesQuantity) {
+        return setValue("nMaxSales", maxSalesQuantity);
     }
 
-    public String getModifyingId() {
-        return (String) getValue("sModified");
+    public int getMaxSales() {
+        return (int) getValue("nMaxSales");
     }
 
-    public JSONObject setModifiedDate(Date modifiedDate) {
-        return setValue("dModified", modifiedDate);
+    public JSONObject setAveShare(int aveShareQuantity) {
+        return setValue("nAveShare", aveShareQuantity);
     }
 
-    public Date getModifiedDate() {
-        return (Date) getValue("dModified");
+    public int getAveShare() {
+        return (int) getValue("nAveShare");
+    }
+
+    public JSONObject setTotalOrder(int totalOrderQuantity) {
+        return setValue("nTotOrder", totalOrderQuantity);
+    }
+
+    public int getTotalOrder() {
+        return (int) getValue("nTotOrder");
+    }
+
+    public JSONObject setMinLevel(int minLevel) {
+        return setValue("nMinLevel", minLevel);
+    }
+
+    public int getMinLevel() {
+        return (int) getValue("nMinLevel");
+    }
+
+    public JSONObject setMaxLevel(int maxLevel) {
+        return setValue("nMaxLevel", maxLevel);
+    }
+
+    public int getMaxLevel() {
+        return (int) getValue("nMaxLevel");
+    }
+
+    public JSONObject setClassify(String classify) {
+        return setValue("cClassify", classify);
+    }
+
+    public String getClassify() {
+        return (String) getValue("cClassify");
     }
 
     @Override
@@ -163,7 +201,7 @@ public class Model_Inv_Classification_Master extends Model {
 
     @Override
     public String getTable() {
-        return "inv_classification_master";
+        return "inv_classification_detail";
     }
 
     @Override
@@ -191,14 +229,13 @@ public class Model_Inv_Classification_Master extends Model {
     }
 
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5) {
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
 
-    //reference object models
     public Model_Branch Branch() {
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
@@ -261,5 +298,25 @@ public class Model_Inv_Classification_Master extends Model {
             return poCategory;
         }
     }
-    //end - reference object models
+
+    public Model_Inventory Inventory() {
+        if (!"".equals((String) getValue("sStockIDx"))) {
+            if (poInventory.getEditMode() == EditMode.READY
+                    && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {
+                return poInventory;
+            } else {
+                poJSON = poInventory.openRecord((String) getValue("sStockIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poInventory;
+                } else {
+                    poInventory.initialize();
+                    return poInventory;
+                }
+            }
+        } else {
+            poInventory.initialize();
+            return poInventory;
+        }
+    }
 }
