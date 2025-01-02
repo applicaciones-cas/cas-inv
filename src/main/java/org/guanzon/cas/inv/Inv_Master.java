@@ -381,39 +381,19 @@ public class Inv_Master extends Parameter{
                         " LEFT JOIN Category_Level4 i ON a.sCategCd4 = i.sCategrCd" +
                         " LEFT JOIN Inv_Type j ON a.sInvTypCd = j.sInvTypCd" +
                     ", Inv_Master k" + 
-                " WHERE a.sStockIDx = k.sStockIDx" ;
+                " WHERE a.sStockIDx = k.sStockIDx" +
+                " AND k.sBranchCd = " + SQLUtil.toSQL(psBranchCd);
         
         if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
         
         return lsSQL;
     }
-    
-    private JSONObject openRecord(JSONObject json){
+     private JSONObject openRecord(JSONObject json){
         if (json != null) {
-             System.out.println("stockid == " + (String) poJSON.get("sStockIDx"));
-             String lsStockID = (String) poJSON.get("sStockIDx");
-           poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
-           if ("error".equals((String) poJSON.get("result"))){
-               if ((String) poJSON.get("sBranchCd") == null){
-                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
-                   System.out.println("stockid == " + lsStockID);
-                poJSON = poInventory.openRecord((String) poJSON.get("sStockIDx"));
-//                EditMode.ADDNEW;
-                } 
-                return poJSON;
-            }
+            System.out.println("(String) poJSON.get(\"sBranchCd\") == " + psBranchCd);
+            poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), psBranchCd);
             
-            
-            
-            else {
-                poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
-            }
-            
-//            if ("error".equals((String)poJSON.get("result"))){
-//                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
-//                 poJSON = newRecord();
-//            
-//            }
+            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
             
             //load reference records
             poInventory.openRecord("sStockIDx");
@@ -430,8 +410,50 @@ public class Inv_Master extends Parameter{
         
         return poJSON;
     }
+//    private JSONObject openRecord(JSONObject json){
+//        if (json != null) {
+//             System.out.println("stockid == " + (String) poJSON.get("sStockIDx"));
+//             String lsStockID = (String) poJSON.get("sStockIDx");
+//           poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+//           if ("error".equals((String) poJSON.get("result"))){
+//               if ((String) poJSON.get("sBranchCd") == null){
+//                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
+//                   System.out.println("stockid == " + lsStockID);
+//                poJSON = poInventory.openRecord((String) poJSON.get("sStockIDx"));
+////                EditMode.ADDNEW;    
+//                } 
+//                return poJSON;
+//            }
+//            
+//            
+//            
+//            else {
+//                poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
+//            }
+//            
+////            if ("error".equals((String)poJSON.get("result"))){
+////                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
+////                 poJSON = newRecord();
+////            
+////            }
+//            
+//            //load reference records
+//            poInventory.openRecord("sStockIDx");
+//            poBranch.openRecord("sBranchCd");
+//            poWarehouse.openRecord("sWHouseID");
+//            poLocation.openRecord("sLocatnID");
+//            //end -load reference records
+//        } else {
+//            poJSON = new JSONObject();
+//            poJSON.put("result", "error");
+//            poJSON.put("message", "No record loaded.");
+//            return poJSON;
+//        }
+//        
+//        return poJSON;
+//    }
         public JSONObject searchRecordwithBarrcode(String value, boolean byCode) {
-            System.out.println("getSQB = " + getSQ_Browse());
+            
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -442,5 +464,21 @@ public class Inv_Master extends Parameter{
 
         return openRecord(poJSON);
     }
-    
+    public JSONObject searchRecordwithBarrcode(String value, 
+                                    boolean byCode, 
+                                    String stockID) {
+        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
+                                                    "a.sStockIDx = " + SQLUtil.toSQL(stockID));
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                  "BarCode»Description»Selling Price»ID",
+                "sBarCodex»sDescript»nSelPrice»sStockIDx",
+                "a.sBarCodex»a.sDescript»a.nSelPrice»a.sStockIDx",
+                byCode ? 0 : 1);
+        System.out.println("poJSON = " + poJSON);
+        return openRecord(poJSON);
+    }
 }
+        

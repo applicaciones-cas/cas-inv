@@ -264,13 +264,13 @@ public class Model_Inv_Master extends Model{
         return "";
     }
     
-//    @Override
-//    public JSONObject openRecord(String Id1) {
-//        JSONObject loJSON = new JSONObject();
-//        loJSON.put("result", "error");
-//        loJSON.put("message", "This feature is not supported.");
-//        return loJSON;
-//    }
+    @Override
+    public JSONObject openRecord(String Id1) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
     
     //reference object models
     public Model_Branch Branch() {
