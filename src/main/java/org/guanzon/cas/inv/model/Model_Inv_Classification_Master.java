@@ -35,7 +35,6 @@ public class Model_Inv_Classification_Master extends Model {
             poEntity.updateObject("dProcessd", "0000-00-00 00:00:00");
             poEntity.updateObject("dPostedxx", "0000-00-00 00:00:00");
             //end - assign default values
-
             poEntity.insertRow();
             poEntity.moveToCurrentRow();
 
@@ -159,11 +158,6 @@ public class Model_Inv_Classification_Master extends Model {
     @Override
     public String getNextCode() {
         return "";
-    }
-
-    @Override
-    public String getTable() {
-        return "inv_classification_master";
     }
 
     @Override

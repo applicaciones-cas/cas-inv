@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
+import org.guanzon.appdriver.constant.InventoryClassification;
+import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.model.Model_Category;
 import org.guanzon.cas.parameter.model.Model_Category_Level2;
@@ -39,7 +41,7 @@ public class Model_Inv_Classification_Detail extends Model {
             poEntity.updateObject("nTotOrder", 0);
             poEntity.updateObject("nMinLevel", 0);
             poEntity.updateObject("nMaxLevel", 0);
-            poEntity.updateObject("cClassify", "F");
+            poEntity.updateObject("cClassify", InventoryClassification.NEW_ITEMS);
             //end - assign default values
             poEntity.insertRow();
             poEntity.moveToCurrentRow();
@@ -53,12 +55,15 @@ public class Model_Inv_Classification_Detail extends Model {
             ID5 = "sStockIDx";
 
             //initialize reference objects
-            ParamModels model = new ParamModels(poGRider);
-            poBranch = model.Branch();
-            poIndustry = model.Category();
-            poCategory = model.Category2();
-            //end - initialize reference objects
+            ParamModels modelParam = new ParamModels(poGRider);
+            poBranch = modelParam.Branch();
+            poIndustry = modelParam.Category();
+            poCategory = modelParam.Category2();
 
+            InvModels modelInv = new InvModels(poGRider);
+            poInventory = modelInv.Inventory();
+
+            //end - initialize reference objects
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -122,8 +127,8 @@ public class Model_Inv_Classification_Detail extends Model {
         return (int) getValue("nAbnrmQty");
     }
 
-    public JSONObject setTotalQuantity(int totalQuantity) {
-        return setValue("nTotlSumx", totalQuantity);
+    public JSONObject setTotalSumQuantity(int totalSumQuantity) {
+        return setValue("nTotlSumx", totalSumQuantity);
     }
 
     public int getTotalQuantity() {
@@ -197,11 +202,6 @@ public class Model_Inv_Classification_Detail extends Model {
     @Override
     public String getNextCode() {
         return "";
-    }
-
-    @Override
-    public String getTable() {
-        return "inv_classification_detail";
     }
 
     @Override

@@ -51,28 +51,9 @@ public class InvControllers {
         return poInvMaster;
     }
 
-    public InventoryClassification InventoryClassification() {
-        if (poGRider == null) {
-            poLogWrapper.severe("InvControllers.InventoryClassification: Application driver is not set.");
-            return null;
-        }
-
-        if (poInvClassification != null) {
-            return poInvClassification;
-        }
-
-        poInvClassification = new InventoryClassification();
-        poInvClassification.setApplicationDriver(poGRider);
-        poInvClassification.setWithParentClass(true);
-        poInvClassification.setLogWrapper(poLogWrapper);
-        poInvClassification.initialize();
-        poInvClassification.newRecord();
-        return poInvClassification;
-    }
     private final GRider poGRider;
     private final LogWrapper poLogWrapper;
 
     private Inventory poInventory;
     private Inv_Master poInvMaster;
-    private InventoryClassification poInvClassification;
 }
