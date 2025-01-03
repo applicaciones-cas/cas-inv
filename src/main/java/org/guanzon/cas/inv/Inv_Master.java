@@ -137,8 +137,8 @@ public class Inv_Master extends Parameter{
                 getSQ_Browse(),
                 value,
                 "Bar Code»Description»Brand»Color»On Hand»Selling Price»ID",
-                "sBarCodex»sDescript»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»b.nQtyOnHnd»a.nSelPrice»a.sStockIDx",
+                "sBarCodex»sDescript»xModelNme»xColorNme»nQtyOnHnd»nSelPrice»sStockIDx",
+                "a.sBarCodex»a.sDescript»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»k.nQtyOnHnd»a.nSelPrice»a.sStockIDx",
                 byCode ? 0 : 1);
 
         return openRecord(poJSON);
@@ -370,6 +370,7 @@ public class Inv_Master extends Parameter{
                     ", IFNULL(h.sDescript, '') xCategNm3" +
                     ", IFNULL(i.sDescript, '') xCategNm4" +
                     ", IFNULL(j.sDescript, '') xInvTypNm" +
+                    ", k.nQtyOnHnd" +
                 " FROM Inventory a" +
                         " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx" +
                         " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx" +
