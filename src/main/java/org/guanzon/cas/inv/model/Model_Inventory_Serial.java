@@ -9,16 +9,6 @@ import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
-import org.guanzon.cas.parameter.model.Model_Brand;
-import org.guanzon.cas.parameter.model.Model_Category;
-import org.guanzon.cas.parameter.model.Model_Category_Level2;
-import org.guanzon.cas.parameter.model.Model_Category_Level3;
-import org.guanzon.cas.parameter.model.Model_Category_Level4;
-import org.guanzon.cas.parameter.model.Model_Color;
-import org.guanzon.cas.parameter.model.Model_Inv_Type;
-import org.guanzon.cas.parameter.model.Model_Measure;
-import org.guanzon.cas.parameter.model.Model_Model;
-import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inventory_Serial extends Model {
