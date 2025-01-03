@@ -7,20 +7,31 @@ import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inventory_Serial;
+import org.guanzon.cas.parameter.services.ParamControllers;
 import org.json.simple.JSONObject;
 
 public class InventorySerial extends Parameter{
     Model_Inventory_Serial poModelSerial;
+    ParamControllers poParams;
     
+    String psBranchCd;
+    public void setBranchCode(String branchCode){
+        psBranchCd = branchCode;
+    }
     @Override
     public void initialize() {
         psRecdStat = Logical.YES;
         
         poModelSerial = new Model_Inventory_Serial();
         poModelSerial.setApplicationDriver(poGRider);
-        poModelSerial.setXML("Model_Inventory");
-        poModelSerial.setTableName("Inventory");
+        poModelSerial.setXML("Model_Inv_Serial");
+        poModelSerial.setTableName("Inv_Serial");
         poModelSerial.initialize();
+        
+        psBranchCd = poGRider.getBranchCode();
+        
+        //initialize reference objects
+        poParams = new ParamControllers(poGRider, logwrapr);
     }
     
     @Override
@@ -64,13 +75,13 @@ public class InventorySerial extends Parameter{
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
-                "Bar Code»Description»Brand»Model»Color»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
+                "Serial ID»Serial 01»Serial 02",
+                "sSerialID»sSerial01»sSerial02",
+                "a.sSerialID»a.sSerial01»a.sSerial02",
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
+            return poModelSerial.openRecord((String) poJSON.get("sSerialID"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -79,324 +90,46 @@ public class InventorySerial extends Parameter{
         }
     }
     
-    public JSONObject searchRecord(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
     
-    public JSONObject searchRecord(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecord(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1,
-                                    String categoryIdLevel2) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
-                                                    " AND a.sCategCd2 = " + SQLUtil.toSQL(categoryIdLevel2));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordAttributes(String value, boolean byCode) {
-        poJSON = ShowDialogFX.Search(poGRider,
-                getSQ_Browse(),
-                value,
-                "Brand»Model»Color»Selling Price»ID",
-                "xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordAttributes(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Brand»Model»Color»Selling Price»ID",
-                "xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordAttributes(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Brand»Model»Color»Selling Price»ID",
-                "xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordAttributes(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1,
-                                    String categoryIdLevel2) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
-                                                    " AND a.sCategCd2 = " + SQLUtil.toSQL(categoryIdLevel2));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Brand»Model»Color»Selling Price»ID",
-                "xBrandNme»xModelNme»xColorNme»nSelPrice»sStockIDx",
-                "IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordWithMeasurement(String value, boolean byCode) {
-        poJSON = ShowDialogFX.Search(poGRider,
-                getSQ_Browse(),
-                value,
-                "Bar Code»Description»Brand»Model»Color»Measurement»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»xMeasurNm»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordWithMeasurement(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Measurement»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»xMeasurNm»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordWithMeasurement(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Measurement»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»xMeasurNm»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
-    
-    public JSONObject searchRecordWithMeasurement(String value, 
-                                    boolean byCode, 
-                                    String inventoryTypeId,
-                                    String categoryIdLevel1,
-                                    String categoryIdLevel2) {
-        String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
-                                                "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
-                                                    " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
-                                                    " AND a.sCategCd2 = " + SQLUtil.toSQL(categoryIdLevel2));
-        
-        poJSON = ShowDialogFX.Search(poGRider,
-                lsSQL,
-                value,
-                "Bar Code»Description»Brand»Model»Color»Measurement»Selling Price»ID",
-                "sBarCodex»sDescript»xBrandNme»xModelNme»xColorNme»xMeasurNm»nSelPrice»sStockIDx",
-                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')'))»IFNULL(d.sDescript, '')»IFNULL(e.sMeasurNm, '')»a.nSelPrice»a.sStockIDx",
-                byCode ? 0 : 1);
-
-        if (poJSON != null) {
-            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
-        } else {
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "No record loaded.");
-            return poJSON;
-        }
-    }
     
     @Override
     public String getSQ_Browse(){
         String lsSQL;
         String lsRecdStat = "";
 
-        if (psRecdStat.length() > 1) {
-            for (int lnCtr = 0; lnCtr <= psRecdStat.length() - 1; lnCtr++) {
-                lsRecdStat += ", " + SQLUtil.toSQL(Character.toString(psRecdStat.charAt(lnCtr)));
-            }
-
-            lsRecdStat = "a.cRecdStat IN (" + lsRecdStat.substring(2) + ")";
-        } else {
-            lsRecdStat = "a.cRecdStat = " + SQLUtil.toSQL(psRecdStat);
-        }
+//        if (psRecdStat.length() > 1) {
+//            for (int lnCtr = 0; lnCtr <= psRecdStat.length() - 1; lnCtr++) {
+//                lsRecdStat += ", " + SQLUtil.toSQL(Character.toString(psRecdStat.charAt(lnCtr)));
+//            }
+//
+//            lsRecdStat = "a.cRecdStat IN (" + lsRecdStat.substring(2) + ")";
+//        } else {
+//            lsRecdStat = "a.cRecdStat = " + SQLUtil.toSQL(psRecdStat);
+//        }
         
-        lsSQL = "SELECT" +
-                    "  a.sStockIDx" +
-                    ", a.sBarCodex" +
-                    ", a.sDescript" +
-                    ", a.sAltBarCd" +
-                    ", a.nUnitPrce" +
-                    ", a.nSelPrice" +
-                    ", IFNULL(b.sDescript, '') xBrandNme" +
-                    ", IF(IFNULL(c.sDescript, '') = '', '', CONCAT(c.sDescript, '(', c.sModelCde, ')')) xModelNme" +
-                    ", IFNULL(d.sDescript, '') xColorNme" +
-                    ", IFNULL(e.sMeasurNm, '') xMeasurNm" +
-                    ", IFNULL(f.sDescript, '') xCategNm1" +
-                    ", IFNULL(g.sDescript, '') xCategNm2" +
-                    ", IFNULL(h.sDescript, '') xCategNm3" +
-                    ", IFNULL(i.sDescript, '') xCategNm4" +
-                    ", IFNULL(j.sDescript, '') xInvTypNm" +
-                " FROM Inventory a" +
-                    " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx" +
-                    " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx" +
-                    " LEFT JOIN Color d ON a.sColorIDx = d.sColorIDx" +
-                    " LEFT JOIN Measure e ON a.sMeasurID = e.sMeasurID" +
-                    " LEFT JOIN Category f ON a.sCategCd1 = f.sCategrCd" +
-                    " LEFT JOIN Category_Level2 g ON a.sCategCd2 = g.sCategrCd" +
-                    " LEFT JOIN Category_Level3 h ON a.sCategCd3 = h.sCategrCd" +
-                    " LEFT JOIN Category_Level4 i ON a.sCategCd4 = i.sCategrCd" +
-                    " LEFT JOIN Inv_Type j ON a.sInvTypCd = j.sInvTypCd";
+         lsSQL = "SELECT" +
+               "   a.sSerialID" +
+               " , a.sBranchCd" +
+               " , a.sSerial01" +
+               " , a.sSerial02" +
+               " , a.nUnitPrce" +
+               " , a.sStockIDx" +
+               " , a.cLocation" +
+               " , a.cSoldStat" +
+               " , a.cUnitType" +
+               " , a.sCompnyID" +
+               " , a.sWarranty" +
+               " , a.dModified" +
+               " , b.sBarCodex AS xBarCodex" + 
+               " , b.sDescript AS xDescript" + 
+               " FROM Inv_Serial a" +
+               " LEFT JOIN Inventory b ON a.sStockIDx = b.sStockIDx";
+
         
         
         System.out.println("query natin to = = " + lsSQL );
         
-        if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
+//        if (!psRecdStat.isEmpty()) lsSQL = MiscUtil.addCondition(lsSQL, lsRecdStat);
         
         return lsSQL;
     }

@@ -2,6 +2,7 @@
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.Inv_Master;
+import org.guanzon.cas.inv.InventorySerial;
 import org.guanzon.cas.inv.services.InvControllers;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
@@ -12,9 +13,9 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class testInvMaster {
+public class testInvSerial {
     static GRider instance;
-    static Inv_Master record;
+    static InventorySerial record;
 
     @BeforeClass
     public static void setUpClass() {
@@ -22,7 +23,7 @@ public class testInvMaster {
 
         instance = MiscUtil.Connect();
         
-        record = new InvControllers(instance, null).InventoryMaster();
+        record = new InvControllers(instance, null).InventorySerial();
     }
 
     @Test
@@ -44,26 +45,26 @@ public class testInvMaster {
             Assert.fail((String) loJSON.get("message"));
         } 
         
-        loJSON = record.getModel().setWarehouseId("001");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        } 
+//        loJSON = record.getModel().setWarehouseId("001");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        } 
         
         loJSON = record.getModel().setLocationId("001");
         if ("error".equals((String) loJSON.get("result"))) {
             Assert.fail((String) loJSON.get("message"));
         }  
         
-        loJSON = record.getModel().setBinId("1");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }
+//        loJSON = record.getModel().setBinId("1");
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }
         
-        loJSON = record.getModel().setModifyingId(instance.getUserID());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
+//        loJSON = record.getModel().setModifyingId(instance.getUserID());
+//        if ("error".equals((String) loJSON.get("result"))) {
+//            Assert.fail((String) loJSON.get("message"));
+//        }     
+//        
         loJSON = record.getModel().setModifiedDate(instance.getServerDate());
         if ("error".equals((String) loJSON.get("result"))) {
             Assert.fail((String) loJSON.get("message"));
