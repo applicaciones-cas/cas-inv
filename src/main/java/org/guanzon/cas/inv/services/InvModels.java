@@ -4,6 +4,8 @@ import org.guanzon.appdriver.base.GRider;
 import org.guanzon.cas.inv.model.Model_Inv_Classification_Detail;
 import org.guanzon.cas.inv.model.Model_Inv_Classification_Master;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
+import org.guanzon.cas.inv.model.Model_Inv_Serial;
+import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.inv.model.Model_Inventory;
 
 public class InvModels {
@@ -62,6 +64,40 @@ public class InvModels {
 
         return poInvLedger;
     }
+    
+    public Model_Inv_Serial InventorySerial() {
+        if (poGRider == null) {
+            System.err.println("InvModels.InventorySerial: Application driver is not set.");
+            return null;
+        }
+
+        if (poInvSerial == null) {
+            poInvSerial = new Model_Inv_Serial();
+            poInvSerial.setApplicationDriver(poGRider);
+            poInvSerial.setXML("Model_Inv_Serial");
+            poInvSerial.setTableName("Inv_Serial");
+            poInvSerial.initialize();
+        }
+
+        return poInvSerial;
+    }
+    
+    public Model_Inv_Serial_Ledger InventorySerialLedger() {
+        if (poGRider == null) {
+            System.err.println("InvModels.InventorySerialLedger: Application driver is not set.");
+            return null;
+        }
+
+        if (poInvSerialLeger == null) {
+            poInvSerialLeger = new Model_Inv_Serial_Ledger();
+            poInvSerialLeger.setApplicationDriver(poGRider);
+            poInvSerialLeger.setXML("Model_Inv_Serial_Ledger");
+            poInvSerialLeger.setTableName("Inv_Serial_Ledger");
+            poInvSerialLeger.initialize();
+        }
+
+        return poInvSerialLeger;
+    }
 
     public Model_Inv_Classification_Detail InventoryClassificationDetail() {
         if (poGRider == null) {
@@ -101,7 +137,10 @@ public class InvModels {
     private Model_Inventory poInventory;
     private Model_Inv_Master poInvMaster;
     private Model_Inv_Classification_Master poInvLedger;
+    private Model_Inv_Serial poInvSerial;
+    private Model_Inv_Serial_Ledger poInvSerialLeger;
     private Model_Inv_Classification_Detail poInvClassDetail;
     private Model_Inv_Classification_Master poInvClassMaster;
+    
 
 }

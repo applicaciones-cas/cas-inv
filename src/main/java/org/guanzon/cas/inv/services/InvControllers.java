@@ -4,11 +4,9 @@ import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.LogWrapper;
 import org.guanzon.cas.inv.Inv_Master;
 import org.guanzon.cas.inv.Inventory;
-import org.guanzon.cas.inv.InventoryClassification;
-import org.guanzon.cas.inv.InventorySerial;
+import org.guanzon.cas.inv.InvSerial;
 
 public class InvControllers {
-
     public InvControllers(GRider applicationDriver, LogWrapper logWrapper) {
         poGRider = applicationDriver;
         poLogWrapper = logWrapper;
@@ -52,7 +50,7 @@ public class InvControllers {
         return poInvMaster;
     }
     
-    public InventorySerial InventorySerial() {
+    public InvSerial InventorySerial() {
         if (poGRider == null) {
             poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
             return null;
@@ -62,7 +60,7 @@ public class InvControllers {
             return poInventorySerial;
         }
 
-        poInventorySerial = new InventorySerial();
+        poInventorySerial = new InvSerial();
         poInventorySerial.setApplicationDriver(poGRider);
         poInventorySerial.setWithParentClass(true);
         poInventorySerial.setLogWrapper(poLogWrapper);
@@ -76,5 +74,5 @@ public class InvControllers {
 
     private Inventory poInventory;
     private Inv_Master poInvMaster;
-    private InventorySerial poInventorySerial;
+    private InvSerial poInventorySerial;
 }

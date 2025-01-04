@@ -15,8 +15,8 @@ import org.guanzon.cas.parameter.model.Model_Inv_Location;
 import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.json.simple.JSONObject;
 
-public class Model_Inventory_Serial_Ledger extends Model {
-    private Model_Inventory_Serial poInventorySerial;
+public class Model_Inv_Serial_Ledger extends Model {
+    private Model_Inv_Serial poInventorySerial;
     Model_Branch poBranch;
     Model_Warehouse poWarehouse;
     Model_Inventory poInventory;
@@ -46,7 +46,7 @@ public class Model_Inventory_Serial_Ledger extends Model {
 
             //initialize other connections
 
-            poInventorySerial = new Model_Inventory_Serial();
+            poInventorySerial = new Model_Inv_Serial();
             poInventorySerial.setApplicationDriver(poGRider);
             poInventorySerial.setXML("Model_Inv_Serial");
             poInventorySerial.setTableName("Inv_Serial");
@@ -63,7 +63,7 @@ public class Model_Inventory_Serial_Ledger extends Model {
             System.exit(1);
         }
     }
-    public Model_Inventory_Serial InventorySerial() {
+    public Model_Inv_Serial InventorySerial() {
         if (!"".equals((String) getValue("sSerialID"))) {
             if (poInventorySerial.getEditMode() == EditMode.READY
                     && poInventorySerial.getStockId().equals((String) getValue("sSerialID"))) {

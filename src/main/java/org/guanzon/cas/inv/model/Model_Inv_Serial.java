@@ -11,7 +11,7 @@ import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
 import org.json.simple.JSONObject;
 
-public class Model_Inventory_Serial extends Model {
+public class Model_Inv_Serial extends Model {
     private Model_Inventory poInventory;
 
     @Override

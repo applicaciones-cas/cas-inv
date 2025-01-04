@@ -2,7 +2,7 @@
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.Inv_Master;
-import org.guanzon.cas.inv.InventorySerial;
+import org.guanzon.cas.inv.InvSerial;
 import org.guanzon.cas.inv.services.InvControllers;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
@@ -15,7 +15,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInvSerial {
     static GRider instance;
-    static InventorySerial record;
+    static InvSerial record;
 
     @BeforeClass
     public static void setUpClass() {

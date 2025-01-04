@@ -2,16 +2,14 @@ package org.guanzon.cas.inv;
 
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Parameter;
-import org.guanzon.appdriver.base.MiscUtil;
-import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
-import org.guanzon.cas.inv.model.Model_Inventory_Serial_Ledger;
+import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.parameter.services.ParamControllers;
 import org.json.simple.JSONObject;
 
-public class InventorySerialLedger extends Parameter{
-    Model_Inventory_Serial_Ledger poModelSerialLedger;
+public class InvSerialLedger extends Parameter{
+    Model_Inv_Serial_Ledger poModelSerialLedger;
     ParamControllers poParams;
     
 
@@ -19,7 +17,7 @@ public class InventorySerialLedger extends Parameter{
     public void initialize() {
         psRecdStat = Logical.YES;
         
-        poModelSerialLedger = new Model_Inventory_Serial_Ledger();
+        poModelSerialLedger = new Model_Inv_Serial_Ledger();
         poModelSerialLedger.setApplicationDriver(poGRider);
         poModelSerialLedger.setXML("Model_Inv_Serial_Ledger");
         poModelSerialLedger.setTableName("Inv_Serial_Ledger");
@@ -62,7 +60,7 @@ public class InventorySerialLedger extends Parameter{
     }
     
     @Override
-    public Model_Inventory_Serial_Ledger getModel() {
+    public Model_Inv_Serial_Ledger getModel() {
         return poModelSerialLedger;
     }
     
