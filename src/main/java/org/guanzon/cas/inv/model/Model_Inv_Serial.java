@@ -9,10 +9,12 @@ import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
+import org.guanzon.cas.parameter.model.Model_Branch;
 import org.json.simple.JSONObject;
 
 public class Model_Inv_Serial extends Model {
     private Model_Inventory poInventory;
+    private Model_Branch poBranch;
 
     @Override
     public void initialize() {
@@ -44,6 +46,12 @@ public class Model_Inv_Serial extends Model {
             poInventory.setTableName("Inventory");
             poInventory.initialize();
             
+            poBranch = new Model_Branch();
+            poBranch.setApplicationDriver(poGRider);
+            poBranch.setXML("Model_Branch");
+            poBranch.setTableName("Branch");
+            poBranch.initialize();
+            
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -68,6 +76,27 @@ public class Model_Inv_Serial extends Model {
         } else {
             poInventory.initialize();
             return poInventory;
+        }
+    }
+    public Model_Branch Branch() {
+            System.out.println("Branch == " + (String) getValue("sBranchCd"));
+        if (!"".equals((String) getValue("sBranchCd"))) {
+            if (poBranch.getEditMode() == EditMode.READY
+                    && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {
+                return poBranch;
+            } else {
+                poJSON = poBranch.openRecord((String) getValue("sBranchCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poBranch;
+                } else {
+                    poBranch.initialize();
+                    return poBranch;
+                }
+            }
+        } else {
+            poBranch.initialize();
+            return poBranch;
         }
     }
 

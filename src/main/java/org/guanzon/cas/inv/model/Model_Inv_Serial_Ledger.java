@@ -42,8 +42,9 @@ public class Model_Inv_Serial_Ledger extends Model {
 
             poEntity.absolute(1);
 
-            ID = poEntity.getMetaData().getColumnLabel(1);
-
+            ID = "sSerialID";
+            ID2 = "sSourceCd";
+            ID3 = "sSourceNo";
             //initialize other connections
 
             poInventorySerial = new Model_Inv_Serial();
@@ -84,7 +85,7 @@ public class Model_Inv_Serial_Ledger extends Model {
         }
     }
     public Model_Branch Branch() {
-            System.out.println("Branch == " + (String) getValue("sBranchCd"));
+            System.out.println("here is branch code == " + (String) getValue("sBranchCd"));
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
                     && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {

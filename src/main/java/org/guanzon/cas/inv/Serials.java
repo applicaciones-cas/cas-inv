@@ -16,11 +16,13 @@ import org.json.simple.JSONObject;
 public class Serials {    
     GRider poGRider;
     String psParent;
+
     
     JSONObject poJSON;
     LogWrapper poLogWrapper;
     
     InvSerial poInventorySerial;
+    InvSerialLedger poInventorySerialx;
     List<Model_Inv_Serial_Ledger> poInventorySerialLedger;
     
     public Serials(GRider applicationDriver,
@@ -32,12 +34,14 @@ public class Serials {
         poLogWrapper = logWrapper;
         
         poInventorySerial = new InvControllers(applicationDriver, logWrapper).InventorySerial();
-        
         poInventorySerialLedger = new ArrayList<>();
     }
         
     public InvSerial Serial(){
         return poInventorySerial;
+    }
+        public InvSerialLedger SerialLedgerList(){
+        return poInventorySerialx;
     }
     
     public Model_Inv_Serial_Ledger SerialLedger(int row){
@@ -174,17 +178,19 @@ public class Serials {
         }        
     }
     
-    
     public JSONObject OpenSerialLedger(String fsValue) {
     StringBuilder lsSQL = new StringBuilder("SELECT " +
-                "  sSerialID, " +
-                "  sBranchCd, " +
-                "  nLedgerNo, " +
-                "  dTransact, " +
-                "  sSourceCd, " +
-                "  cSoldStat, " +
-                "  cLocation " +
-                "FROM Inv_Serial_Ledger");
+                "  a.sSerialID, " +
+                "  a.sBranchCd, " +
+                "  a.nLedgerNo, " +
+                "  a.dTransact, " +
+                "  a.sSourceCd, " +
+                "  a.sSourceNo, " +
+                "  a.cSoldStat, " +
+                "  a.cLocation, " +
+                "  b.sBranchNm " +
+                "FROM Inv_Serial_Ledger a " + 
+                " LEFT JOIN Branch b on b.sBranchCd = a.sBranchCd");
 
     // Add condition to the query
     lsSQL.append(MiscUtil.addCondition("", "sSerialID = " + SQLUtil.toSQL(fsValue)));
@@ -198,14 +204,16 @@ public class Serials {
     try {
         int lnctr = 0;
 
-        if (MiscUtil.RecordCount(loRS) > 0) {
+        if (MiscUtil.RecordCount(loRS) >= 0) {
             poInventorySerialLedger = new ArrayList<>();
             while (loRS.next()) {
                 // Print the result set
+                
                 System.out.println("sSerialID: " + loRS.getString("sSerialID"));
-                System.out.println("sBranchCd: " + loRS.getString("sBranchCd"));
+                System.out.println("sBranchNme: " + loRS.getString("sBranchNm"));
                 System.out.println("nLedgerNo: " + loRS.getInt("nLedgerNo"));
                 System.out.println("dTransact: " + loRS.getDate("dTransact"));
+                System.out.println("sSourceNo: " + loRS.getString("sSourceNo"));
                 System.out.println("sSourceCd: " + loRS.getString("sSourceCd"));
                 System.out.println("cSoldStat: " + loRS.getString("cSoldStat"));
                 System.out.println("cLocation: " + loRS.getString("cLocation"));
@@ -213,37 +221,30 @@ public class Serials {
 
                 poInventorySerialLedger.add(serialLedger(loRS.getString("sSerialID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo")));
                 poInventorySerialLedger.get(poInventorySerialLedger.size() - 1)
-                        .openRecord(loRS.getString("sSerialID"));
-
+                        .openRecord(loRS.getString("sSerialID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo"));
                 lnctr++;
             }
 
             System.out.println("Records found: " + lnctr);
             poJSON.put("result", "success");
             poJSON.put("message", "Record loaded successfully.");
-
-        } else {
-            poInventorySerialLedger = new ArrayList<>();
-            addSerialLedger();
+            
+            
+        }else{
+                poInventorySerialLedger = new ArrayList<>();
+                addSerialLedger();
+                poJSON.put("result", "error");
+                poJSON.put("continue", true);
+                poJSON.put("message", "No record found .");
+            }
+            MiscUtil.close(loRS);
+        } catch (SQLException e) {
             poJSON.put("result", "error");
-            poJSON.put("continue", true);
-            poJSON.put("message", "No record found.");
+            poJSON.put("message", e.getMessage());
         }
-    } catch (SQLException e) {
-        System.err.println("SQL error: " + e.getMessage());
-        poJSON.put("result", "error");
-        poJSON.put("message", e.getMessage());
-    } catch (Exception e) {
-        System.err.println("Unexpected error: " + e.getMessage());
-        poJSON.put("result", "error");
-        poJSON.put("message", "An unexpected error occurred.");
-    } finally {
-        // Ensure that the ResultSet is closed in any case
-        MiscUtil.close(loRS);
+        return poJSON;
     }
 
-    return poJSON;
-}
-
+    
     
 }
