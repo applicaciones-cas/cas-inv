@@ -1,4 +1,6 @@
 org\guanzon\cas\inv\InventoryClassification.class
+org\guanzon\cas\inv\Inv.class
+org\guanzon\cas\inv\Inv_Ledger.class
 org\guanzon\cas\inv\model\Model_Inv_Serial.class
 org\guanzon\cas\inv\model\Model_Inv_Stock_Request_Master.class
 org\guanzon\cas\inv\InvSerialLedger.class

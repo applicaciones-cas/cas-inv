@@ -68,6 +68,8 @@ public class InvControllers {
         poInventorySerial.newRecord();
         return poInventorySerial;
     }
+    
+    
 
     private final GRider poGRider;
     private final LogWrapper poLogWrapper;
