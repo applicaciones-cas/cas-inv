@@ -2,8 +2,6 @@ package org.guanzon.cas.inv;
 
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Parameter;
-import org.guanzon.appdriver.base.MiscUtil;
-import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inv_Serial;
@@ -32,6 +30,7 @@ public class InvSerial extends Parameter{
         
         //initialize reference objects
         poParams = new ParamControllers(poGRider, logwrapr);
+        
     }
     
     @Override
@@ -120,6 +119,7 @@ public class InvSerial extends Parameter{
                " , a.sCompnyID" +
                " , a.sWarranty" +
                " , a.dModified" +
+               " , b.sBrandIDx" +
                " , b.sBarCodex AS xBarCodex" + 
                " , b.sDescript AS xDescript" + 
                " FROM Inv_Serial a" +

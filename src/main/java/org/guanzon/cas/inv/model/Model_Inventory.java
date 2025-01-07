@@ -172,48 +172,25 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Brand Brand() {
-        System.out.println("brand == " + (String) getValue("sBrandIDx"));
-        if (getValue("sBrandIDx") != null && !"".equals((String) getValue("sBrandIDx"))) {
-    String sBrandIDx = (String) getValue("sBrandIDx");
+        System.out.print("Brand == " +(String) getValue("sBrandIDx") );
+        if (!"".equals((String) getValue("sBrandIDx"))) {
+            if (poBrand.getEditMode() == EditMode.READY
+                    && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
+                return poBrand;
+            } else {
+                poJSON = poBrand.openRecord((String) getValue("sBrandIDx"));
 
-    // Check if poBrand is initialized and valid
-    if (poBrand != null) {
-        // Check if the poBrand is in ready state and if the brand ID matches
-        if (poBrand.getEditMode() == EditMode.READY
-                && poBrand.getBrandId().equals(sBrandIDx)) {
-            return poBrand;
-        } else {
-            // Ensure poJSON is initialized before calling methods on it
-            if (poJSON != null) {
-                poJSON = poBrand.openRecord(sBrandIDx);
-
-                // Validate the response from openRecord
-                if ("success".equals(poJSON.get("result"))) {
+                if ("success".equals((String) poJSON.get("result"))) {
                     return poBrand;
                 } else {
-                    // Initialize poCategory if the result is not success
-                    if (poCategory != null) {
-                        poCategory.initialize();
-                    }
+                    poBrand.initialize();
                     return poBrand;
                 }
-            } else {
-                // Handle null poJSON case
-                System.err.println("Error: poJSON is null");
-                return poBrand;
             }
+        } else {
+            poBrand.initialize();
+            return poBrand;
         }
-    } else {
-        // Handle null poBrand case
-        System.err.println("Error: poBrand is null");
-        return null;  // Or return a default object depending on the situation
-    }
-} else {
-    // Handle the case where sBrandIDx is null or empty
-    poBrand.initialize();
-    return poBrand;
-}
-
     }
 
     public Model_Model Model() {

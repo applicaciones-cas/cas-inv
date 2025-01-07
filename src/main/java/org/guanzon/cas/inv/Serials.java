@@ -40,9 +40,7 @@ public class Serials {
     public InvSerial Serial(){
         return poInventorySerial;
     }
-        public InvSerialLedger SerialLedgerList(){
-        return poInventorySerialx;
-    }
+
     
     public Model_Inv_Serial_Ledger SerialLedger(int row){
         return poInventorySerialLedger.get(row);
