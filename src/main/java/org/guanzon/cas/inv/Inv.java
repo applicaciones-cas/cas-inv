@@ -2,7 +2,9 @@ package org.guanzon.cas.inv;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.appdriver.base.MiscUtil;
@@ -170,10 +172,10 @@ public class Inv {
         return new InvModels(poGRider).InventoryLedger();
     }
 
-    private Model_Inv_Ledger serialLedger(String serialId, String sourceCode, String sourceNo) {
+    private Model_Inv_Ledger inventoryLedger(String serialId,String sBranchCd,String sWHouseID, String sourceCode, String sourceNo) {
         Model_Inv_Ledger object = new InvModels(poGRider).InventoryLedger();
 
-        JSONObject loJSON = object.openRecord(serialId, sourceCode, sourceNo);
+        JSONObject loJSON = object.openRecord(serialId,sBranchCd,sWHouseID, sourceCode, sourceNo);
 
         if ("success".equals((String) loJSON.get("result"))) {
             return object;
@@ -182,8 +184,8 @@ public class Inv {
         }
     }
 
-    public JSONObject OpenInvLedger(String fsStockID, String fdDateFrom, String fdDateThru) {
-       StringBuilder lsSQL = new StringBuilder(" SELECT a.sStockIDx, "
+    public JSONObject OpenInvLedger(String fsStockID,LocalDate fdDateFrom, LocalDate fdDateThru ) {
+        StringBuilder lsSQL = new StringBuilder("SELECT a.sStockIDx, "
                 + " a.dTransact, "
                 + " c.sBranchNm, "
                 + " a.sSourceCd, "
@@ -191,20 +193,24 @@ public class Inv {
                 + " a.nQtyInxxx, "
                 + " a.nQtyOutxx, "
                 + " a.nQtyOnHnd, "
-                + " a.nLedgerNo "
+                + " a.nLedgerNo, "
+                + " a.sWHouseID, "
+                + " c.sBranchCd "
                 + " FROM Inv_Ledger a "
                 + " LEFT JOIN Inv_Master b ON a.sStockIDx = b.sStockIDx "
                 + " LEFT JOIN Branch c ON a.sBranchCd = c.sBranchCd ");
 
-        // Add conditions to the query
-        lsSQL.append(MiscUtil.addCondition("", "a.sStockIDx = " + SQLUtil.toSQL(fsStockID)));
-        lsSQL.append(" AND a.dTransact BETWEEN " + SQLUtil.toSQL(fdDateFrom) + " AND " + SQLUtil.toSQL(fdDateThru));
+        // Use SQLUtil.toSQL for handling the dates
+        String condition = "a.sStockIDx = " + SQLUtil.toSQL(fsStockID)
+                + " AND a.dTransact BETWEEN " + SQLUtil.toSQL(fdDateFrom.toString())
+                + " AND " + SQLUtil.toSQL(fdDateThru.toString());
+        lsSQL.append(MiscUtil.addCondition("", condition));
         lsSQL.append(" ORDER BY a.nLedgerNo ASC");
 
         System.out.println("Executing SQL: " + lsSQL.toString());
 
         ResultSet loRS = poGRider.executeQuery(lsSQL.toString());
-        poJSON = new JSONObject();
+        JSONObject poJSON = new JSONObject();
 
         try {
             int lnctr = 0;
@@ -220,13 +226,13 @@ public class Inv {
                     System.out.println("dTransact: " + loRS.getDate("dTransact"));
                     System.out.println("sSourceNo: " + loRS.getString("sSourceNo"));
                     System.out.println("sSourceCd: " + loRS.getString("sSourceCd"));
-//                    System.out.println("cSoldStat: " + loRS.getString("cSoldStat"));
-//                    System.out.println("cLocation: " + loRS.getString("cLocation"));
+                    System.out.println("cSoldStat: " + loRS.getString("sBranchCd"));
+                    System.out.println("cLocation: " + loRS.getString("sWHouseID"));
                     System.out.println("------------------------------------------------------------------------------");
 
-                    poInventoryLedger.add(serialLedger(loRS.getString("sStockIDx"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo")));
+                    poInventoryLedger.add(inventoryLedger(loRS.getString("sStockIDx"),loRS.getString("sBranchCd"),loRS.getString("sWHouseID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo")));
                     poInventoryLedger.get(poInventoryLedger.size() - 1)
-                            .openRecord(loRS.getString("sStockIDx"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo"));
+                            .openRecord(loRS.getString("sStockIDx"), loRS.getString("sBranchCd"),loRS.getString("sWHouseID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo"));
                     lnctr++;
                 }
 
