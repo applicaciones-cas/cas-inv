@@ -255,4 +255,76 @@ public class Inv {
         return poJSON;
     }
 
+    public JSONObject OpenInvSerialLedger(String fsStockID,LocalDate fdDateFrom, LocalDate fdDateThru ) {
+        StringBuilder lsSQL = new StringBuilder("SELECT a.sStockIDx, "
+                + " a.dTransact, "
+                + " c.sBranchNm, "
+                + " a.sSourceCd, "
+                + " a.sSourceNo, "
+                + " a.nQtyInxxx, "
+                + " a.nQtyOutxx, "
+                + " a.nQtyOnHnd, "
+                + " a.nLedgerNo, "
+                + " a.sWHouseID, "
+                + " c.sBranchCd "
+                + " FROM Inv_Ledger a "
+                + " LEFT JOIN Inv_Master b ON a.sStockIDx = b.sStockIDx "
+                + " LEFT JOIN Branch c ON a.sBranchCd = c.sBranchCd ");
+
+        // Use SQLUtil.toSQL for handling the dates
+        String condition = "a.sStockIDx = " + SQLUtil.toSQL(fsStockID)
+                + " AND a.dTransact BETWEEN " + SQLUtil.toSQL(fdDateFrom.toString())
+                + " AND " + SQLUtil.toSQL(fdDateThru.toString());
+        lsSQL.append(MiscUtil.addCondition("", condition));
+        lsSQL.append(" ORDER BY a.nLedgerNo ASC");
+
+        System.out.println("Executing SQL: " + lsSQL.toString());
+
+        ResultSet loRS = poGRider.executeQuery(lsSQL.toString());
+        JSONObject poJSON = new JSONObject();
+
+        try {
+            int lnctr = 0;
+
+            if (MiscUtil.RecordCount(loRS) >= 0) {
+                poInventoryLedger = new ArrayList<>();
+                while (loRS.next()) {
+                    // Print the result set
+
+                    System.out.println("sSerialID: " + loRS.getString("sStockIDx"));
+                    System.out.println("sBranchNme: " + loRS.getString("sBranchNm"));
+                    System.out.println("nLedgerNo: " + loRS.getInt("nLedgerNo"));
+                    System.out.println("dTransact: " + loRS.getDate("dTransact"));
+                    System.out.println("sSourceNo: " + loRS.getString("sSourceNo"));
+                    System.out.println("sSourceCd: " + loRS.getString("sSourceCd"));
+                    System.out.println("cSoldStat: " + loRS.getString("sBranchCd"));
+                    System.out.println("cLocation: " + loRS.getString("sWHouseID"));
+                    System.out.println("------------------------------------------------------------------------------");
+
+                    poInventoryLedger.add(inventoryLedger(loRS.getString("sStockIDx"),loRS.getString("sBranchCd"),loRS.getString("sWHouseID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo")));
+                    poInventoryLedger.get(poInventoryLedger.size() - 1)
+                            .openRecord(loRS.getString("sStockIDx"), loRS.getString("sBranchCd"),loRS.getString("sWHouseID"), loRS.getString("sSourceCd"), loRS.getString("sSourceNo"));
+                    lnctr++;
+                }
+
+                System.out.println("Records found: " + lnctr);
+                poJSON.put("result", "success");
+                poJSON.put("message", "Record loaded successfully.");
+
+            } else {
+                poInventoryLedger = new ArrayList<>();
+                addSerialLedger();
+                poJSON.put("result", "error");
+                poJSON.put("continue", true);
+                poJSON.put("message", "No record found .");
+            }
+            MiscUtil.close(loRS);
+        } catch (SQLException e) {
+            poJSON.put("result", "error");
+            poJSON.put("message", e.getMessage());
+        }
+        return poJSON;
+    }
+    
+    
 }

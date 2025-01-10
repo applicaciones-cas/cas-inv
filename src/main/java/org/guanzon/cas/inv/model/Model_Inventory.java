@@ -172,7 +172,7 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Brand Brand() {
-        System.out.print("Brand == " +(String) getValue("sBrandIDx") );
+        System.out.print("Brand == " + (String) getValue("sBrandIDx") );
         if (!"".equals((String) getValue("sBrandIDx"))) {
             if (poBrand.getEditMode() == EditMode.READY
                     && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
