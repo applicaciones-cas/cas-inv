@@ -17,3 +17,4 @@ org\guanzon\cas\inv\services\InvModels.class
 org\guanzon\cas\inv\Serials.class
 org\guanzon\cas\inv\model\Model_Inv_Serial_Ledger.class
 org\guanzon\cas\inv\model\Model_Inventory.class
+org\guanzon\cas\inv\ObservableListUtil.class

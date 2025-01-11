@@ -89,6 +89,24 @@ public class InvSerial extends Parameter{
         }
     }
     
+    public JSONObject searchRecordStockID(String value, boolean byCode) {
+        poJSON = ShowDialogFX.Search(poGRider,
+                getSQ_Browse(),
+                value,
+                "StockID ID»Serial ID»Serial 01»Serial 02",
+                "sStockIDx»sSerialID»sSerial01»sSerial02",
+                "a.sStockIDx»a.sSerialID»a.sSerial01»a.sSerial02",
+                byCode ? 0 : 1);
+
+        if (poJSON != null) {
+            return poModelSerial.openRecord((String) poJSON.get("sStockIDx"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
     
     
     @Override

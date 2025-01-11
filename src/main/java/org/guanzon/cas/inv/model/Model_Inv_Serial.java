@@ -36,8 +36,8 @@ public class Model_Inv_Serial extends Model {
 
             poEntity.absolute(1);
 
-            ID = poEntity.getMetaData().getColumnLabel(1);
-
+            ID = ("sSerialID");
+            ID2 = ("sBranchCd");
             //initialize other connections
 
             poInventory = new Model_Inventory();
