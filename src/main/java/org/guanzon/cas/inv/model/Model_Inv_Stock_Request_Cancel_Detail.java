@@ -5,9 +5,6 @@ import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
-import org.guanzon.appdriver.constant.InventoryClassification;
-import org.guanzon.appdriver.constant.Logical;
-import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.model.Model_Inv_Location;
@@ -31,12 +28,6 @@ public class Model_Inv_Stock_Request_Cancel_Detail extends Model{
             poEntity.moveToInsertRow();
 
             MiscUtil.initRowSet(poEntity);
-            
-            //assign default values
-//            poEntity.updateObject("dStartEnc", "0000-00-00");
-//            poEntity.updateObject("dTransact", "0000-00-00");
-//            poEntity.updateString("cTranStat", RecordStatus.INACTIVE);
-            //end - assign default values
 
             poEntity.insertRow();
             poEntity.moveToCurrentRow();
@@ -215,5 +206,4 @@ public class Model_Inv_Stock_Request_Cancel_Detail extends Model{
             return poInventory;
         }
     }
-    //end - reference object models
 }
