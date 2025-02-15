@@ -88,6 +88,8 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Category Category() {
+        System.out.println("xml = " + XML);
+        System.out.println("sCategCd1 = " + getValue("sCategCd1"));
         if (!"".equals((String) getValue("sCategCd1"))) {
             if (poCategory.getEditMode() == EditMode.READY
                     && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
@@ -172,6 +174,7 @@ public class Model_Inventory extends Model {
     }
 
     public Model_Brand Brand() {
+        System.out.print("Brand == " + (String) getValue("sBrandIDx") );
         if (!"".equals((String) getValue("sBrandIDx"))) {
             if (poBrand.getEditMode() == EditMode.READY
                     && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
@@ -182,7 +185,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poBrand;
                 } else {
-                    poCategory.initialize();
+                    poBrand.initialize();
                     return poBrand;
                 }
             }

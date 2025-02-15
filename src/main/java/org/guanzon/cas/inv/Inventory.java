@@ -79,6 +79,7 @@ public class Inventory extends Parameter{
         }
     }
     
+    
     public JSONObject searchRecord(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId) {

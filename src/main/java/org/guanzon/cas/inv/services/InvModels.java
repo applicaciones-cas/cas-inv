@@ -3,7 +3,10 @@ package org.guanzon.cas.inv.services;
 import org.guanzon.appdriver.base.GRider;
 import org.guanzon.cas.inv.model.Model_Inv_Classification_Detail;
 import org.guanzon.cas.inv.model.Model_Inv_Classification_Master;
+import org.guanzon.cas.inv.model.Model_Inv_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
+import org.guanzon.cas.inv.model.Model_Inv_Serial;
+import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.inv.model.Model_Inventory;
 
 public class InvModels {
@@ -46,14 +49,14 @@ public class InvModels {
         return poInvMaster;
     }
 
-    public Model_Inv_Classification_Master InventoryLedger() {
+    public Model_Inv_Ledger InventoryLedger() {
         if (poGRider == null) {
             System.err.println("InvModels.InventoryLedger: Application driver is not set.");
             return null;
         }
 
         if (poInvLedger == null) {
-            poInvLedger = new Model_Inv_Classification_Master();
+            poInvLedger = new Model_Inv_Ledger();
             poInvLedger.setApplicationDriver(poGRider);
             poInvLedger.setXML("Model_Inv_Ledger");
             poInvLedger.setTableName("Inv_Ledger");
@@ -62,6 +65,40 @@ public class InvModels {
 
         return poInvLedger;
     }
+    
+    public Model_Inv_Serial InventorySerial() {
+        if (poGRider == null) {
+            System.err.println("InvModels.InventorySerial: Application driver is not set.");
+            return null;
+        }
+
+        if (poInvSerial == null) {
+            poInvSerial = new Model_Inv_Serial();
+            poInvSerial.setApplicationDriver(poGRider);
+            poInvSerial.setXML("Model_Inv_Serial");
+            poInvSerial.setTableName("Inv_Serial");
+            poInvSerial.initialize();
+        }
+
+        return poInvSerial;
+    }
+    
+    public Model_Inv_Serial_Ledger InventorySerialLedger() {
+        if (poGRider == null) {
+            System.err.println("InvModels.InventorySerialLedger: Application driver is not set.");
+            return null;
+        }
+
+        if (poInvSerialLeger == null) {
+            poInvSerialLeger = new Model_Inv_Serial_Ledger();
+            poInvSerialLeger.setApplicationDriver(poGRider);
+            poInvSerialLeger.setXML("Model_Inv_Serial_Ledger");
+            poInvSerialLeger.setTableName("Inv_Serial_Ledger");
+            poInvSerialLeger.initialize();
+        }
+
+        return poInvSerialLeger;
+    }
 
     public Model_Inv_Classification_Detail InventoryClassificationDetail() {
         if (poGRider == null) {
@@ -69,12 +106,12 @@ public class InvModels {
             return null;
         }
 
-        if (poInvLedger == null) {
-            poInvLedger = new Model_Inv_Classification_Master();
-            poInvLedger.setApplicationDriver(poGRider);
-            poInvLedger.setXML("Model_Inv_Classification_Detail");
-            poInvLedger.setTableName("Inv_Classification_Detail");
-            poInvLedger.initialize();
+        if (poInvClassLedger == null) {
+            poInvClassLedger = new Model_Inv_Classification_Master();
+            poInvClassLedger.setApplicationDriver(poGRider);
+            poInvClassLedger.setXML("Model_Inv_Classification_Detail");
+            poInvClassLedger.setTableName("Inv_Classification_Detail");
+            poInvClassLedger.initialize();
         }
 
         return poInvClassDetail;
@@ -86,12 +123,12 @@ public class InvModels {
             return null;
         }
 
-        if (poInvLedger == null) {
-            poInvLedger = new Model_Inv_Classification_Master();
-            poInvLedger.setApplicationDriver(poGRider);
-            poInvLedger.setXML("Model_Inv_Classification_Master");
-            poInvLedger.setTableName("Inv_Classification_Master");
-            poInvLedger.initialize();
+        if (poInvClassLedger == null) {
+            poInvClassLedger = new Model_Inv_Classification_Master();
+            poInvClassLedger.setApplicationDriver(poGRider);
+            poInvClassLedger.setXML("Model_Inv_Classification_Master");
+            poInvClassLedger.setTableName("Inv_Classification_Master");
+            poInvClassLedger.initialize();
         }
 
         return poInvClassMaster;
@@ -100,8 +137,12 @@ public class InvModels {
 
     private Model_Inventory poInventory;
     private Model_Inv_Master poInvMaster;
-    private Model_Inv_Classification_Master poInvLedger;
+    private Model_Inv_Ledger poInvLedger;
+    private Model_Inv_Classification_Master poInvClassLedger;
+    private Model_Inv_Serial poInvSerial;
+    private Model_Inv_Serial_Ledger poInvSerialLeger;
     private Model_Inv_Classification_Detail poInvClassDetail;
     private Model_Inv_Classification_Master poInvClassMaster;
+    
 
 }
